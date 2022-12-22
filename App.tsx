@@ -10,13 +10,22 @@
 
 import React, {FC} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import RootNavigator from './src/navigator/RootNavigator/RootNavigator';
+import {setJSExceptionHandler} from 'react-native-exception-handler';
+
+setJSExceptionHandler((error, isFatal) => {
+  // eslint-disable-next-line no-console
+  console.log(error, isFatal);
+});
 
 const App: FC<any> = () => {
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 

@@ -1,7 +1,7 @@
 const Lang = {
   Tab: {
-    Project: 'project',
-    Setting: 'setting',
+    Project: 'tab.project',
+    Setting: 'tab.setting',
   },
 };
 

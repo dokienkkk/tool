@@ -1,4 +1,5 @@
 {
-    "project" : "Dự án",
-    "setting" : "Cài đặt"
+    "tab.project" : "Dự án",
+    "tab.setting" : "Cài đặt",
+    "projects" : "Danh sách dự án"
 }

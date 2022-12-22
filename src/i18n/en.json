@@ -1,4 +1,5 @@
 {
-    "project" : "Project",
-    "setting" : "Setting"
+    "tab.project" : "Project",
+    "tab.setting" : "Setting",
+    "projects" : "Projects"
 }
