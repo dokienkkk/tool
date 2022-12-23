@@ -18,6 +18,7 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
   compatibilityJSON: 'v3',
+  returnNull: false,
 });
 
 export default i18n;

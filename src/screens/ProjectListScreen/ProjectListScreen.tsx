@@ -1,11 +1,15 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native';
-import React, {FC} from 'react';
+import {View, Text, StyleSheet, Pressable, TextInput} from 'react-native';
+import type {FC} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import ProjectDetailScreen from '../ProjectDetailScreen/ProjectDetailScreen';
 import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
 import AddButton from '../../icons/AddButton';
 import Colors from '../../styles/Colors';
+import CustomModal from '../../components/CustomModal/CustomModal';
+import {useBoolean} from '../../hooks/use-boolean';
+import shareStyles from '../../styles';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
 
@@ -16,20 +20,36 @@ const ProjectList: FC<ProjectListScreenProps> = (
 
   const [translate] = useTranslation();
 
+  const [isVisile, , openModal, closeModal] = useBoolean(false);
+
   const handleGoToProjectDetailScreen = React.useCallback(() => {
     navigation.navigate(ProjectDetailScreen.name);
   }, [navigation]);
 
+  const handleAddProject = React.useCallback(() => {}, []);
+
   return (
     <DefaultLayout
       title={translate('projects')}
-      right={<AddButton color={Colors.white} />}>
+      right={<AddButton color={Colors.white} />}
+      onPressIconRight={openModal}>
       <View style={styles.container}>
         <Text style={styles.text}>{translate('projects')}</Text>
         <Pressable onPress={handleGoToProjectDetailScreen}>
           <Text style={styles.text}>Go to detail</Text>
         </Pressable>
       </View>
+
+      <CustomModal
+        isVisible={isVisile}
+        title={translate('project.name')}
+        onBackdropPress={closeModal}
+        labelPrimary={translate('action.confirm')}
+        labelSecondary={translate('action.cancel')}
+        onPressSecondary={closeModal}
+        onPressPrimary={handleAddProject}>
+        <TextInput style={[styles.input, shareStyles.w100]} />
+      </CustomModal>
     </DefaultLayout>
   );
 };
@@ -42,6 +62,11 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
+  },
+  input: {
+    borderColor: Colors.black,
+    borderWidth: 0.5,
+    height: 60,
   },
 });
 

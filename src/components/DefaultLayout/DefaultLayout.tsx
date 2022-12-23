@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import React, {FC, PropsWithChildren, ReactElement} from 'react';
+import type {FC, PropsWithChildren, ReactElement} from 'react';
+import React from 'react';
 import Colors from '../../styles/Colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import BackButton from '../../icons/BackButton';
 import type {DefaultTFuncReturn} from 'i18next';
+import shareStyles from '../../styles';
 
 interface DefaultLayoutProps {
   title?: string | DefaultTFuncReturn;
@@ -46,7 +48,7 @@ const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
               <BackButton color={Colors.white} />
             </TouchableOpacity>
           )}
-          <Text style={styles.title}>{title}</Text>
+          <Text style={[styles.title, shareStyles.textBold]}>{title}</Text>
           {right && (
             <TouchableOpacity
               onPress={onPressIconRight}
@@ -81,7 +83,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     color: Colors.white,
-    fontWeight: '600',
     lineHeight: 20,
     marginLeft: 30,
   },

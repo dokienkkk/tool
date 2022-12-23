@@ -1,5 +1,9 @@
 {
     "tab.project" : "Project",
     "tab.setting" : "Setting",
-    "projects" : "Projects"
+    "projects" : "Projects",
+    "project.name" : "Project Name",
+    "action.cancel" : "Cancel",
+    "action.confirm" : "Confirm",
+    "action.ok" : "OK"
 }

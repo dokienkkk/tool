@@ -1,12 +1,13 @@
-import React, {FC} from 'react';
+import type {FC} from 'react';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {ProjectListScreen, SettingScreen} from '../../screens';
 import Colors from '../../styles/Colors';
 import {StyleSheet, Text} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import Lang from '../../config/lang';
 import ProjectIcon from '../../icons/ProjectIcon';
 import SettingIcon from '../../icons/SettingIcon';
+import shareStyles from '../../styles';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
@@ -29,11 +30,14 @@ const TabNavigator: FC<TabNavigatorProp> = () => {
         options={{
           tabBarLabel({focused}) {
             return focused ? (
-              <Text style={[styles.focused, styles.label]}>
-                {translate(Lang.Tab.Project)}
+              <Text
+                style={[styles.focused, styles.label, shareStyles.textRegular]}>
+                {translate('tab.project')}
               </Text>
             ) : (
-              <Text style={styles.label}>{translate(Lang.Tab.Project)}</Text>
+              <Text style={[styles.label, shareStyles.textRegular]}>
+                {translate('tab.project')}
+              </Text>
             );
           },
           tabBarIcon: ({focused}) => <ProjectIcon focus={focused} />,
@@ -45,11 +49,14 @@ const TabNavigator: FC<TabNavigatorProp> = () => {
         options={{
           tabBarLabel({focused}) {
             return focused ? (
-              <Text style={[styles.focused, styles.label]}>
-                {translate(Lang.Tab.Setting)}
+              <Text
+                style={[styles.focused, styles.label, shareStyles.textRegular]}>
+                {translate('tab.setting')}
               </Text>
             ) : (
-              <Text style={styles.label}>{translate(Lang.Tab.Setting)}</Text>
+              <Text style={[styles.label, shareStyles.textRegular]}>
+                {translate('tab.setting')}
+              </Text>
             );
           },
           tabBarIcon: ({focused}) => <SettingIcon focus={focused} />,
@@ -69,7 +76,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    fontWeight: '600',
     lineHeight: 12,
     marginBottom: 12,
   },

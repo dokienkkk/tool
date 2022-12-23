@@ -1,5 +1,9 @@
 {
     "tab.project" : "Dự án",
     "tab.setting" : "Cài đặt",
-    "projects" : "Danh sách dự án"
+    "projects" : "Danh sách dự án",
+    "project.name" : "Tên dự án",
+    "action.cancel" : "Hủy",
+    "action.confirm" : "Xác nhận",
+    "action.ok" : "OK"
 }

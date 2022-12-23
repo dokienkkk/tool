@@ -1,4 +1,5 @@
-import React, {FC} from 'react';
+import type {FC} from 'react';
+import React from 'react';
 import * as Screens from '../../screens';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TabNavigator from '../TabNavigator/TabNavigator';
