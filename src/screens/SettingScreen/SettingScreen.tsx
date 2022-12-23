@@ -51,6 +51,7 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
             label={translate('setting.language')}
             left={<LanguageIcon color={Colors.blue} />}
             right={<ArrowRight color={Colors.blue} />}
+            onPress={handleGoToChangeLanguageScreen}
           />
           <TouchableBlock
             label={translate('file.import')}

@@ -28,6 +28,11 @@ const shareStyles = StyleSheet.create({
     fontFamily: 'Quicksand-Regular',
     fontWeight: '600',
   },
+  defaultBackground: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    padding: 20,
+  },
 });
 
 export default shareStyles;
