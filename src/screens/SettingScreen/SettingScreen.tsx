@@ -1,16 +1,88 @@
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import type {FC} from 'react';
 import React from 'react';
-import shareStyles from '../../styles';
 import {useTranslation} from 'react-i18next';
-interface SettingScreenProps {}
-const SettingScreen: FC<SettingScreenProps> = () => {
+import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
+import Colors from '../../styles/Colors';
+import shareStyles from '../../styles';
+import TouchableBlock from '../../components/TouchableBlock/TouchableBlock';
+import LanguageIcon from '../../icons/LanguageIcon';
+import ArrowRight from '../../icons/ArrowRight';
+import ProjectSettingIcon from '../../icons/ProjectSettingIcon';
+import BluetoothIcon from '../../icons/BlueToothIcon';
+import ImportIcon from '../../icons/ImportIcon';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import ChangeLanguageScreen from '../ChangeLanguageScreen/ChangeLanguageScreen';
+
+interface SettingScreenProps extends NativeStackScreenProps<any> {}
+
+const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
+  const {navigation} = props;
+
   const [translate] = useTranslation();
+
+  const handleGoToChangeLanguageScreen = React.useCallback(() => {
+    navigation.navigate(ChangeLanguageScreen.name);
+  }, [navigation]);
+
   return (
-    <View style={shareStyles.container}>
-      <Text>{translate('tab.setting')}</Text>
-    </View>
+    <DefaultLayout title={translate('tab.setting')}>
+      <View style={styles.container}>
+        <Text style={[styles.sectionTitle, shareStyles.textRegular]}>
+          {translate('project.management')}
+        </Text>
+        <View style={styles.sectionBlock}>
+          <TouchableBlock
+            label={translate('project.setting')}
+            left={<ProjectSettingIcon color={Colors.blue} />}
+            right={<ArrowRight color={Colors.blue} />}
+          />
+        </View>
+        <Text style={[styles.sectionTitle, shareStyles.textRegular]}>
+          {translate('setting.general')}
+        </Text>
+        <View style={styles.sectionBlock}>
+          <TouchableBlock
+            label={translate('bluetooth.connection')}
+            left={<BluetoothIcon color={Colors.blue} />}
+            right={<ArrowRight color={Colors.blue} />}
+          />
+          <TouchableBlock
+            label={translate('setting.language')}
+            left={<LanguageIcon color={Colors.blue} />}
+            right={<ArrowRight color={Colors.blue} />}
+          />
+          <TouchableBlock
+            label={translate('file.import')}
+            left={<ImportIcon color={Colors.blue} />}
+            right={<ArrowRight color={Colors.blue} />}
+          />
+        </View>
+      </View>
+    </DefaultLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: Colors.background,
+  },
+  sectionTitle: {
+    color: Colors.gray,
+    fontSize: 18,
+  },
+  sectionBlock: {
+    // backgroundColor: Colors.white,
+    width: '100%',
+    // height: 200,
+    marginVertical: 12,
+    // paddingVertical: 8,
+    borderRadius: 16,
+    overflow: 'hidden',
+    // backgroundColor: 'pink',
+  },
+});
 
 export default SettingScreen;

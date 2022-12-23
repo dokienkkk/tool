@@ -3,7 +3,16 @@
     "tab.setting" : "Setting",
     "projects" : "Projects",
     "project.name" : "Project Name",
+    "project.enterName" : "Enter project name...",
+    "project.management" : "Project management",
+    "project.setting" : "Project Settings",
     "action.cancel" : "Cancel",
     "action.confirm" : "Confirm",
-    "action.ok" : "OK"
+    "action.ok" : "OK",
+    "setting.language" : "Change language",
+    "setting.language.vietnamese" : "Vietnamese",
+    "setting.language.english" : "English",
+    "setting.general" : "General Setting",
+    "bluetooth.connection" : "Bluetooth Connection",
+    "file.import" : "Import file"
 }

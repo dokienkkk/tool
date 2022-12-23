@@ -48,7 +48,10 @@ const ProjectList: FC<ProjectListScreenProps> = (
         labelSecondary={translate('action.cancel')}
         onPressSecondary={closeModal}
         onPressPrimary={handleAddProject}>
-        <TextInput style={[styles.input, shareStyles.w100]} />
+        <TextInput
+          style={[styles.input, shareStyles.w100, shareStyles.textRegular]}
+          placeholder={translate('project.enterName')}
+        />
       </CustomModal>
     </DefaultLayout>
   );
@@ -59,14 +62,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItem: 'center',
+    backgroundColor: Colors.background,
   },
   text: {
     textAlign: 'center',
   },
   input: {
-    borderColor: Colors.black,
-    borderWidth: 0.5,
+    borderColor: Colors.gray,
+    borderBottomWidth: 0.5,
     height: 60,
+    color: Colors.black,
   },
 });
 

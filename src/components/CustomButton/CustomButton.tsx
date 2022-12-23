@@ -38,13 +38,12 @@ const CustomButton: FC<CustomButtonProps> = (props: CustomButtonProps) => {
 
 const styles = StyleSheet.create({
   button: {
-    height: 48,
+    height: 44,
     justifyContent: 'center',
     alignItems: 'center',
     flexGrow: 1,
     borderRadius: 30,
     marginHorizontal: 8,
-    // flex: 1,
   },
   dangerBorder: {
     borderWidth: 0.5,

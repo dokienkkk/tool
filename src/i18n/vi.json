@@ -3,7 +3,16 @@
     "tab.setting" : "Cài đặt",
     "projects" : "Danh sách dự án",
     "project.name" : "Tên dự án",
+    "project.enterName" : "Nhập tên dự án...",
+    "project.management" : "Quản lý dự án",
+    "project.setting" : "Cài đặt dự án",
     "action.cancel" : "Hủy",
     "action.confirm" : "Xác nhận",
-    "action.ok" : "OK"
+    "action.ok" : "OK",
+    "setting.language" : "Chọn ngôn ngữ",
+    "setting.language.vietnamese" : "Tiếng Việt",
+    "setting.language.english" : "English",
+    "setting.general" : "Cài đặt hệ thống",
+    "bluetooth.connection" : "Kết nối Bluetooth",
+    "file.import" : "Import file"
 }

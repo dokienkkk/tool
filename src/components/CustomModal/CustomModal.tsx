@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   },
   body: {
     marginVertical: 8,
+    paddingHorizontal: 8,
   },
   footer: {
     flexDirection: 'row',
