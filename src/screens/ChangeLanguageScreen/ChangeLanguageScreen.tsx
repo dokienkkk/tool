@@ -9,6 +9,7 @@ import TouchableBlock from '../../components/TouchableBlock/TouchableBlock';
 import i18next from 'i18next';
 import Vietnamese from '../../icons/Vietnamese';
 import English from '../../icons/English';
+import {showSuccess} from '../../helpers/toast-helper';
 
 interface ChangeLanguageScreenProps extends NativeStackScreenProps<any> {}
 
@@ -26,8 +27,9 @@ const ChangeLanguageScreen: FC<ChangeLanguageScreenProps> = (
   const handleChangeLanguage = React.useCallback(
     (lang: 'en' | 'vi') => async () => {
       await i18next.changeLanguage(lang);
+      showSuccess(translate('setting.language.success'));
     },
-    [],
+    [translate],
   );
 
   return (

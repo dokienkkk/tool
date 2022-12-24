@@ -12,6 +12,7 @@
     "setting.language" : "Chọn ngôn ngữ",
     "setting.language.vietnamese" : "Tiếng Việt",
     "setting.language.english" : "English",
+    "setting.language.success" : "Đã chuyển sang Tiếng Việt",
     "setting.general" : "Cài đặt hệ thống",
     "bluetooth.connection" : "Kết nối Bluetooth",
     "file.import" : "Import file"

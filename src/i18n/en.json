@@ -12,6 +12,7 @@
     "setting.language" : "Change language",
     "setting.language.vietnamese" : "Vietnamese",
     "setting.language.english" : "English",
+    "setting.language.success" : "Language changed to English",
     "setting.general" : "General Setting",
     "bluetooth.connection" : "Bluetooth Connection",
     "file.import" : "Import file"
