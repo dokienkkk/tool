@@ -31,7 +31,7 @@ const TabNavigator: FC<TabNavigatorProp> = () => {
           tabBarLabel({focused}) {
             return focused ? (
               <Text
-                style={[styles.focused, styles.label, shareStyles.textRegular]}>
+                style={[styles.label, shareStyles.textRegular, styles.focused]}>
                 {translate('tab.project')}
               </Text>
             ) : (
@@ -50,7 +50,7 @@ const TabNavigator: FC<TabNavigatorProp> = () => {
           tabBarLabel({focused}) {
             return focused ? (
               <Text
-                style={[styles.focused, styles.label, shareStyles.textRegular]}>
+                style={[styles.label, shareStyles.textRegular, styles.focused]}>
                 {translate('tab.setting')}
               </Text>
             ) : (
@@ -72,12 +72,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   focused: {
-    color: Colors.primary,
+    color: Colors.blue,
   },
   label: {
-    fontSize: 12,
-    lineHeight: 12,
+    fontSize: 14,
+    lineHeight: 14,
     marginBottom: 12,
+    color: Colors.gray,
   },
 });
 

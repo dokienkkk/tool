@@ -13,6 +13,7 @@ import BluetoothIcon from '../../icons/BlueToothIcon';
 import ImportIcon from '../../icons/ImportIcon';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import ChangeLanguageScreen from '../ChangeLanguageScreen/ChangeLanguageScreen';
+import UpdateIcon from '../../icons/UpdateIcon';
 
 interface SettingScreenProps extends NativeStackScreenProps<any> {}
 
@@ -56,6 +57,12 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
           <TouchableBlock
             label={translate('file.import')}
             left={<ImportIcon color={Colors.blue} />}
+            right={<ArrowRight color={Colors.blue} />}
+          />
+
+          <TouchableBlock
+            label={translate('update')}
+            left={<UpdateIcon color={Colors.blue} />}
             right={<ArrowRight color={Colors.blue} />}
           />
         </View>

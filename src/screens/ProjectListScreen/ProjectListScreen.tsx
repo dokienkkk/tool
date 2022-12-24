@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Pressable, TextInput} from 'react-native';
+import {View, StyleSheet, TextInput} from 'react-native';
 import type {FC} from 'react';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -10,6 +10,9 @@ import Colors from '../../styles/Colors';
 import CustomModal from '../../components/CustomModal/CustomModal';
 import {useBoolean} from '../../hooks/use-boolean';
 import shareStyles from '../../styles';
+import TouchableBlock from '../../components/TouchableBlock/TouchableBlock';
+import ProjectItemIcon from '../../icons/ProjectItemIcon';
+import {numberOfLines} from '../../helpers/string-helper';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
 
@@ -23,7 +26,11 @@ const ProjectList: FC<ProjectListScreenProps> = (
   const [isVisile, , openModal, closeModal] = useBoolean(false);
 
   const handleGoToProjectDetailScreen = React.useCallback(() => {
-    navigation.navigate(ProjectDetailScreen.name);
+    navigation.navigate(ProjectDetailScreen.name, {
+      project: {
+        name: 'Dự án Rạng Đông Rạng Đông Rạng Đông ',
+      },
+    });
   }, [navigation]);
 
   const handleAddProject = React.useCallback(() => {}, []);
@@ -34,10 +41,12 @@ const ProjectList: FC<ProjectListScreenProps> = (
       right={<AddButton color={Colors.white} />}
       onPressIconRight={openModal}>
       <View style={styles.container}>
-        <Text style={styles.text}>{translate('projects')}</Text>
-        <Pressable onPress={handleGoToProjectDetailScreen}>
-          <Text style={styles.text}>Go to detail</Text>
-        </Pressable>
+        <TouchableBlock
+          left={<ProjectItemIcon color={Colors.blue} />}
+          label={numberOfLines('Dự án Rạng Đông Rạng Đông Rạng Đông ', 30)}
+          onPress={handleGoToProjectDetailScreen}
+          style={styles.item}
+        />
       </View>
 
       <CustomModal
@@ -60,18 +69,17 @@ const ProjectList: FC<ProjectListScreenProps> = (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItem: 'center',
     backgroundColor: Colors.background,
-  },
-  text: {
-    textAlign: 'center',
+    padding: 20,
   },
   input: {
     borderColor: Colors.gray,
     borderBottomWidth: 0.5,
     height: 60,
     color: Colors.black,
+  },
+  item: {
+    height: 66,
   },
 });
 

@@ -6,14 +6,16 @@
     "project.enterName" : "Nhập tên dự án...",
     "project.management" : "Quản lý dự án",
     "project.setting" : "Cài đặt dự án",
+    "project.info" : "Thông tin dự án ",
     "action.cancel" : "Hủy",
     "action.confirm" : "Xác nhận",
     "action.ok" : "OK",
     "setting.language" : "Chọn ngôn ngữ",
     "setting.language.vietnamese" : "Tiếng Việt",
-    "setting.language.english" : "English",
+    "setting.language.english" : "Tiếng Anh",
     "setting.language.success" : "Đã chuyển sang Tiếng Việt",
     "setting.general" : "Cài đặt hệ thống",
     "bluetooth.connection" : "Kết nối Bluetooth",
-    "file.import" : "Import file"
+    "file.import" : "Import file",
+    "update" : "Cập nhật"
 }

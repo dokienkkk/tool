@@ -1,3 +1,4 @@
+import type {StyleProp} from 'react-native';
 import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 import type {FC, ReactElement} from 'react';
 import React from 'react';
@@ -11,17 +12,19 @@ interface TouchableBlockProps {
   right?: ReactElement;
 
   label?: string;
+
+  style?: StyleProp<any>;
 }
 
 const TouchableBlock: FC<TouchableBlockProps> = (
   props: TouchableBlockProps,
 ) => {
-  const {onPress, label, left, right} = props;
+  const {onPress, label, left, right, style} = props;
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[shareStyles.w100, styles.block]}>
+      style={[shareStyles.w100, styles.block, StyleSheet.flatten(style)]}>
       {left && <View style={styles.left}>{left}</View>}
       <Text style={[shareStyles.textRegular, styles.label]}>{label}</Text>
       {right && <View style={styles.right}>{right}</View>}
