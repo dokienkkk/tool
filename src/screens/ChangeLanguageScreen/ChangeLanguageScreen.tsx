@@ -6,9 +6,9 @@ import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
 import {useTranslation} from 'react-i18next';
 import shareStyles from '../../styles';
 import TouchableBlock from '../../components/TouchableBlock/TouchableBlock';
-import Colors from '../../styles/Colors';
-import LanguageIcon from '../../icons/LanguageIcon';
 import i18next from 'i18next';
+import Vietnamese from '../../icons/Vietnamese';
+import English from '../../icons/English';
 
 interface ChangeLanguageScreenProps extends NativeStackScreenProps<any> {}
 
@@ -38,12 +38,12 @@ const ChangeLanguageScreen: FC<ChangeLanguageScreenProps> = (
       <View style={shareStyles.defaultBackground}>
         <TouchableBlock
           label={translate('setting.language.vietnamese')}
-          left={<LanguageIcon color={Colors.blue} />}
+          left={<Vietnamese />}
           onPress={handleChangeLanguage('vi')}
         />
         <TouchableBlock
           label={translate('setting.language.english')}
-          left={<LanguageIcon color={Colors.blue} />}
+          left={<English />}
           onPress={handleChangeLanguage('en')}
         />
       </View>
