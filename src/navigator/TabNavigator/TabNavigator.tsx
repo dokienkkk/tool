@@ -23,6 +23,7 @@ const TabNavigator: FC<TabNavigatorProp> = () => {
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.black,
         tabBarStyle: styles.tabBar,
+        tabBarHideOnKeyboard: true,
       }}>
       <Screen
         name={ProjectListScreen.name}

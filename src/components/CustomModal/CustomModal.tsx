@@ -59,7 +59,7 @@ const CustomModal: FC<PropsWithChildren<CustomModalProps>> = (
               <CustomButton
                 label={labelPrimary}
                 onPress={onPressPrimary}
-                style={[{backgroundColor: Colors.primary}]}
+                style={[{backgroundColor: Colors.blue}]}
                 styleLabel={{color: Colors.white}}
               />
             </View>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   header: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.blue,
     height: 48,
     justifyContent: 'center',
     alignItems: 'center',

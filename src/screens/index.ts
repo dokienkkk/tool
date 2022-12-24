@@ -5,3 +5,5 @@ export {default as ProjectDetailScreen} from './ProjectDetailScreen/ProjectDetai
 export {default as SettingScreen} from './SettingScreen/SettingScreen';
 
 export {default as ChangeLanguageScreen} from './ChangeLanguageScreen/ChangeLanguageScreen';
+
+export {default as UniverseSetAddressScreen} from './UniverseSetAddressScreen/UniverseSetAddressScreen';

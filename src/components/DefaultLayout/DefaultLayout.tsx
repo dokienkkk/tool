@@ -49,12 +49,14 @@ const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
             </TouchableOpacity>
           )}
           <Text style={[styles.title, shareStyles.textBold]}>{title}</Text>
-          {right && (
+          {right && onPressIconRight ? (
             <TouchableOpacity
               onPress={onPressIconRight}
               style={styles.headerRight}>
               {right}
             </TouchableOpacity>
+          ) : (
+            <View style={styles.headerRight}>{right}</View>
           )}
         </View>
         {children}

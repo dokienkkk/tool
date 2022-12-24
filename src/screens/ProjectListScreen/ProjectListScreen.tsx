@@ -1,4 +1,4 @@
-import {View, StyleSheet, TextInput} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import type {FC} from 'react';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -16,7 +16,7 @@ import {numberOfLines} from '../../helpers/string-helper';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
 
-const ProjectList: FC<ProjectListScreenProps> = (
+const ProjectListScreen: FC<ProjectListScreenProps> = (
   props: ProjectListScreenProps,
 ) => {
   const {navigation} = props;
@@ -45,7 +45,7 @@ const ProjectList: FC<ProjectListScreenProps> = (
           left={<ProjectItemIcon color={Colors.blue} />}
           label={numberOfLines('Dự án Rạng Đông Rạng Đông Rạng Đông ', 30)}
           onPress={handleGoToProjectDetailScreen}
-          style={styles.item}
+          style={[styles.item, shareStyles.boxShadow]}
         />
       </View>
 
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProjectList;
+export default ProjectListScreen;

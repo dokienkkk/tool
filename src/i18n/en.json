@@ -10,6 +10,7 @@
     "action.cancel" : "Cancel",
     "action.confirm" : "Confirm",
     "action.ok" : "OK",
+    "action.add" : "Add",
     "setting.language" : "Change language",
     "setting.language.vietnamese" : "Vietnamese",
     "setting.language.english" : "English",
@@ -17,5 +18,8 @@
     "setting.general" : "General Setting",
     "bluetooth.connection" : "Bluetooth Connection",
     "file.import" : "Import file",
-    "update" : "Update"
+    "update" : "Update",
+    "universe.add" : "Add universe",
+    "universe.name" : "Universe",
+    "quantity" : "Quantity"
 }

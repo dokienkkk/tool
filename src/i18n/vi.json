@@ -10,6 +10,7 @@
     "action.cancel" : "Hủy",
     "action.confirm" : "Xác nhận",
     "action.ok" : "OK",
+    "action.add" : "Thêm",
     "setting.language" : "Chọn ngôn ngữ",
     "setting.language.vietnamese" : "Tiếng Việt",
     "setting.language.english" : "Tiếng Anh",
@@ -17,5 +18,8 @@
     "setting.general" : "Cài đặt hệ thống",
     "bluetooth.connection" : "Kết nối Bluetooth",
     "file.import" : "Import file",
-    "update" : "Cập nhật"
+    "update" : "Cập nhật",
+    "universe.add" : "Thêm universe",
+    "universe.name" : "Universe",
+    "quantity" : "Số lượng"
 }
