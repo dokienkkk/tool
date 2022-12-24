@@ -16,6 +16,7 @@
     "setting.language.english" : "English",
     "setting.language.success" : "Language changed to English",
     "setting.general" : "General Setting",
+    "setting.system" : "System Setting",
     "bluetooth.connection" : "Bluetooth Connection",
     "file.import" : "Import file",
     "update" : "Update",

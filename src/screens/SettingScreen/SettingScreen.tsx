@@ -40,7 +40,7 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
           />
         </View>
         <Text style={[styles.sectionTitle, shareStyles.textRegular]}>
-          {translate('setting.general')}
+          {translate('setting.system')}
         </Text>
         <View style={styles.sectionBlock}>
           <TouchableBlock
@@ -49,17 +49,21 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
             right={<ArrowRight color={Colors.blue} />}
           />
           <TouchableBlock
+            label={translate('file.import')}
+            left={<ImportIcon color={Colors.blue} />}
+            right={<ArrowRight color={Colors.blue} />}
+          />
+        </View>
+        <Text style={[styles.sectionTitle, shareStyles.textRegular]}>
+          {translate('setting.general')}
+        </Text>
+        <View style={styles.sectionBlock}>
+          <TouchableBlock
             label={translate('setting.language')}
             left={<LanguageIcon color={Colors.blue} />}
             right={<ArrowRight color={Colors.blue} />}
             onPress={handleGoToChangeLanguageScreen}
           />
-          <TouchableBlock
-            label={translate('file.import')}
-            left={<ImportIcon color={Colors.blue} />}
-            right={<ArrowRight color={Colors.blue} />}
-          />
-
           <TouchableBlock
             label={translate('update')}
             left={<UpdateIcon color={Colors.blue} />}
