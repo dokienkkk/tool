@@ -1,18 +1,19 @@
 import type {Device} from '../types/device';
+import {DeviceType} from '../types/device';
 
 export const Devices: Device[] = [
   {
-    typeId: 1,
+    type: DeviceType.RGB_LIGHT,
     name: 'Đèn RGB',
     address: 3,
   },
   {
-    typeId: 2,
+    type: DeviceType.CCT_Light,
     name: 'Đèn CCT',
     address: 2,
   },
   {
-    typeId: 3,
+    type: DeviceType.RGB_CCT_LIGHT,
     name: 'Đèn RGB CCT',
     address: 5,
   },

@@ -47,10 +47,7 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
     [],
   );
 
-  const SecondRoute = React.useCallback(
-    () => <View style={{flex: 1, backgroundColor: Colors.green}} />,
-    [],
-  );
+  const SecondRoute = React.useCallback(() => null, []);
 
   const renderScene = SceneMap({
     first: FirstRoute,

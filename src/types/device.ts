@@ -1,5 +1,11 @@
+export enum DeviceType {
+  RGB_LIGHT,
+  CCT_Light,
+  RGB_CCT_LIGHT,
+}
+
 export interface Device {
-  typeId: number;
+  type: number;
   name: string;
   address: number;
 }
