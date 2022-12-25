@@ -8,18 +8,20 @@
  * @format
  */
 
-import React, {FC} from 'react';
+import type {FC, LazyExoticComponent} from 'react';
+import React, {Suspense} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import RootNavigator from './src/navigator/RootNavigator/RootNavigator';
 import {setJSExceptionHandler} from 'react-native-exception-handler';
+import {globalState} from './src/app/global-state';
 
 setJSExceptionHandler((error, isFatal) => {
   // eslint-disable-next-line no-console
   console.log(error, isFatal);
 });
 
-const App: FC<any> = () => {
+const RootComponent: FC = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
@@ -29,4 +31,23 @@ const App: FC<any> = () => {
   );
 };
 
-export default App;
+const App: LazyExoticComponent<any> = React.lazy(async () => {
+  await globalState.initialize();
+
+  return {
+    default: RootComponent,
+  };
+});
+
+const AppEntry: FC = () => {
+  React.useEffect(() => {
+    //SplashScreen.hide();
+  }, []);
+  return (
+    <Suspense fallback={null}>
+      <App />
+    </Suspense>
+  );
+};
+
+export default AppEntry;

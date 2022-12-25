@@ -1,4 +1,4 @@
-import {View, useWindowDimensions, StyleSheet} from 'react-native';
+import {View, useWindowDimensions, StyleSheet, Button} from 'react-native';
 import type {FC} from 'react';
 import React from 'react';
 import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
@@ -13,6 +13,8 @@ import TabInfoIcon from '../../icons/TabInfoIcon';
 import TabSetAddressIcon from '../../icons/TabSetAddressIcon';
 import {TABBAR} from '../../config/tab-bar';
 import TabBarIcon from '../../components/TabBarIcon/TabBarIcon';
+import {globalState} from '../../app/global-state';
+import {STATUS} from '../../types/status';
 
 interface UniverseSetAddressScreenProps extends NativeStackScreenProps<any> {}
 
@@ -27,6 +29,8 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
 
   const [translate] = useTranslation();
 
+  const [bluetoothStatus] = globalState.useBluetoothStatus();
+
   const [index, setIndex] = React.useState(TABBAR.ROUTE_FIRST.INDEX);
 
   const [routes] = React.useState([
@@ -34,8 +38,12 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
     {key: TABBAR.ROUTE_SECOND.KEY, title: TABBAR.ROUTE_SECOND.TITLE},
   ]);
 
+  const test = async () => {
+    await globalState.setBluetoothStatus(STATUS.CONNECTED);
+  };
+
   const FirstRoute = React.useCallback(
-    () => <View style={{flex: 1, backgroundColor: 'pink'}} />,
+    () => <Button title={'set bluetooth connected'} onPress={test} />,
     [],
   );
 
@@ -80,7 +88,11 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
       left={true}
       goBack={navigation.goBack}
       title={numberOfLines(universe?.name ?? translate('universe.name'), 30)}
-      right={<BluetoothIconThin color={Colors.green} />}>
+      right={
+        <BluetoothIconThin
+          color={bluetoothStatus === STATUS.CONNECTED ? Colors.green : 'red'}
+        />
+      }>
       <View style={shareStyles.defaultBackground}>
         <TabView
           navigationState={{index, routes}}
