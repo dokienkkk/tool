@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 import ProjectIcon from '../../icons/ProjectIcon';
 import SettingIcon from '../../icons/SettingIcon';
 import shareStyles from '../../styles';
+import {TABBAR_HEIGHT} from '../../config/tab-bar';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
@@ -69,7 +70,7 @@ const TabNavigator: FC<TabNavigatorProp> = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 70,
+    height: TABBAR_HEIGHT,
     flexDirection: 'row',
   },
   focused: {

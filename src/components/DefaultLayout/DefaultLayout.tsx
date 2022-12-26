@@ -59,7 +59,7 @@ const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
             <View style={styles.headerRight}>{right}</View>
           )}
         </View>
-        {children}
+        <View style={styles.body}>{children}</View>
       </SafeAreaView>
     </View>
   );
@@ -91,6 +91,9 @@ const styles = StyleSheet.create({
   headerRight: {
     paddingRight: 20,
     marginLeft: 'auto',
+  },
+  body: {
+    flex: 1,
   },
 });
 

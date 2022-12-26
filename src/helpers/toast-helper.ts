@@ -22,3 +22,19 @@ export const showError = (title: string, option?: Options) => {
     ...option,
   });
 };
+
+export const showWarning = (title: string, option?: Options) => {
+  RNToasty.Warn({
+    title,
+    ...defaultOption,
+    ...option,
+  });
+};
+
+export const showInfo = (title: string, option?: Options) => {
+  RNToasty.Info({
+    title,
+    ...defaultOption,
+    ...option,
+  });
+};

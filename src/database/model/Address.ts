@@ -1,7 +1,7 @@
 import {Entity, Column, PrimaryColumn} from 'typeorm/browser';
 
 @Entity('Address')
-export class AddressDAO {
+export class Address {
   @PrimaryColumn('uuid', {name: 'id'})
   id: string;
 

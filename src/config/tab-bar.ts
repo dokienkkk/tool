@@ -10,3 +10,5 @@ export const TABBAR = {
     TITLE: 'Second',
   },
 };
+
+export const TABBAR_HEIGHT = 70;

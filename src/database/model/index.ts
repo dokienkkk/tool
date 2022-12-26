@@ -1,5 +1,5 @@
-export {ProjectDAO} from './ProjectDAO';
+export {Project} from './Project';
 
-export {UniverseDAO} from './UniverserDAO';
+export {Universe} from './Universe';
 
-export {AddressDAO} from './AddressDAO';
+export {Address} from './Address';
