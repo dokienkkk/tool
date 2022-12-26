@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    padding: 20,
+    paddingHorizontal: 20,
     flexGrow: 1,
   },
   center: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     height: 66,
     borderColor: Colors.blue,
     borderWidth: 1,
-    marginBottom: 12,
+    marginVertical: 12,
   },
   none: {
     fontSize: 20,
