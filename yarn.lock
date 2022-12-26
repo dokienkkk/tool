@@ -1367,6 +1367,11 @@
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
   integrity sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ==
 
+"@react-native/normalize-color@*":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native/normalize-color/-/normalize-color-2.1.0.tgz#939b87a9849e81687d3640c5efa2a486ac266f91"
+  integrity sha512-Z1jQI2NpdFJCVgpY+8Dq/Bt3d+YUi1928Q+/CZm/oh66fzM0RUl54vvuXlPJKybH4pdCZey1eDTPaLHkMPNgWA==
+
 "@react-native/normalize-color@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/normalize-color/-/normalize-color-2.0.0.tgz#da955909432474a9a0fe1cbffc66576a0447f567"
@@ -2975,6 +2980,15 @@ depd@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
   integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
+
+deprecated-react-native-prop-types@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/deprecated-react-native-prop-types/-/deprecated-react-native-prop-types-2.2.0.tgz#7a454dabddf0c98d5e77fba4dce29970aa703065"
+  integrity sha512-SiessglRbgelU8sHCrGRImdlNKfVGSp0n6+K304d0rCdHGU8wladJkPmufxE2AkjN2jy71sgekNd9IvdZp9jZg==
+  dependencies:
+    "@react-native/normalize-color" "*"
+    invariant "*"
+    prop-types "*"
 
 deprecated-react-native-prop-types@^4.0.0:
   version "4.0.0"
@@ -6342,6 +6356,12 @@ react-native-tab-view@^3.3.4:
   integrity sha512-rceAYWpHa6knA7tsTnnjlcOxlCErR4F+yXQPpNm125IvYFyv09YRhE5uMU2IzyPIQ1CJvADCHurF3KySzVI+4Q==
   dependencies:
     use-latest-callback "^0.1.5"
+
+"react-native-toasty@https://github.com/dokienkkk/react-native-toasty.git":
+  version "2.0.0"
+  resolved "https://github.com/dokienkkk/react-native-toasty.git#9fa97487978fd9a47f3754981d4c0309bc32f331"
+  dependencies:
+    deprecated-react-native-prop-types "2.2.0"
 
 react-native-vector-icons@^9.2.0:
   version "9.2.0"

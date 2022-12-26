@@ -8,8 +8,6 @@ export class DatabaseService {
 
   public readonly connectDatabase = async () => {
     if (this.dataSource) {
-      // eslint-disable-next-line no-console
-      // console.log('Database has initialized');
       try {
         await this.dataSource.destroy();
         this.dataSource = null;

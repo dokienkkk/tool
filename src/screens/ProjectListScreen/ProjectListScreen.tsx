@@ -25,6 +25,8 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
 
   const [isVisile, , openModal, closeModal] = useBoolean(false);
 
+  const [name, setName] = React.useState('');
+
   const handleGoToProjectDetailScreen = React.useCallback(() => {
     navigation.navigate(ProjectDetailScreen.name, {
       project: {
@@ -33,7 +35,9 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
     });
   }, [navigation]);
 
-  const handleAddProject = React.useCallback(() => {}, []);
+  const handleAddProject = React.useCallback(() => {
+    closeModal();
+  }, [closeModal]);
 
   return (
     <DefaultLayout
@@ -45,7 +49,7 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
           left={<ProjectItemIcon color={Colors.blue} />}
           label={numberOfLines('Dự án Rạng Đông Rạng Đông Rạng Đông ', 30)}
           onPress={handleGoToProjectDetailScreen}
-          style={[styles.item, shareStyles.boxShadow]}
+          style={[styles.item]}
         />
       </View>
 
@@ -60,6 +64,8 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
         <TextInput
           style={[styles.input, shareStyles.w100, shareStyles.textRegular]}
           placeholder={translate('project.enterName')}
+          value={name}
+          onChangeText={setName}
         />
       </CustomModal>
     </DefaultLayout>
@@ -80,6 +86,8 @@ const styles = StyleSheet.create({
   },
   item: {
     height: 66,
+    borderColor: Colors.blue,
+    borderWidth: 1,
   },
 });
 
