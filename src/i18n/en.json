@@ -9,7 +9,10 @@
     "project.info" : "Project Information",
     "project.none" : "No Project",
     "project.error.name" : "Project name cannot be blank",
+    "project.error.existName" : "Name {{name}} already exists",
     "project.create.success" : "Create Project successful",
+    "project.update.success" : "Update project successful",
+    "project.update.name" : "Update name project",
     "action.cancel" : "Cancel",
     "action.confirm" : "Confirm",
     "action.ok" : "OK",
@@ -25,5 +28,6 @@
     "update" : "Update",
     "universe.add" : "Add universe",
     "universe.name" : "Universe",
+    "universe.enterQuantity" : "Quantity",
     "quantity" : "Quantity"
 }

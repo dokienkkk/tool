@@ -75,7 +75,7 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
             renderItem={renderItem}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingBottom: TABBAR_HEIGHT}}
+            contentContainerStyle={{paddingBottom: TABBAR_HEIGHT + 12}}
           />
         ) : (
           <View style={[styles.center]}>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     height: 66,
     borderColor: Colors.blue,
     borderWidth: 1,
-    marginVertical: 12,
+    marginTop: 12,
   },
   none: {
     fontSize: 20,

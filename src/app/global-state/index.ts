@@ -34,8 +34,19 @@ export class GlobalState {
    * @type {Project[]}
    */
 
-  public get projects(): Project[] {
-    return React.getGlobal<GlobalState>().projects;
+  public get project(): Project {
+    return React.getGlobal<GlobalState>().project;
+  }
+
+  public async setProjects(project: Project) {
+    await React.setGlobal<GlobalState>({
+      project,
+    });
+  }
+
+  public useProjects(): StateTuple<GlobalState, 'project'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'project'>('project');
   }
 }
 

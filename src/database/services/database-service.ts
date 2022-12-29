@@ -23,7 +23,7 @@ export class DatabaseService {
       type: 'react-native',
       database: DB_NAME,
       location: DB_LOCATION,
-      logging: ['error', 'query'],
+      logging: ['error'],
       // synchronize: true,
       entities: Object.values(Model),
     });
@@ -40,7 +40,10 @@ export class DatabaseService {
       });
   };
 
-  public readonly getDataSource = () => {
+  public readonly getDataSource = async () => {
+    if (this.dataSource === null) {
+      await this.connectDatabase();
+    }
     return this.dataSource;
   };
 

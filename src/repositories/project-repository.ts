@@ -4,9 +4,9 @@ import {v4} from 'uuid';
 
 export class ProjectRepository {
   public list = async (): Promise<Project[]> => {
-    const projectRepository = databaseService
-      .getDataSource()
-      .getRepository(Project);
+    const dataSource = await databaseService.getDataSource();
+
+    const projectRepository = dataSource.getRepository(Project);
 
     const listProject = await projectRepository.find();
 
@@ -14,9 +14,17 @@ export class ProjectRepository {
   };
 
   public create = async (name: string): Promise<Project> => {
-    const projectRepository = databaseService
-      .getDataSource()
-      .getRepository(Project);
+    const dataSource = await databaseService.getDataSource();
+
+    const projectRepository = dataSource.getRepository(Project);
+
+    const existProject = await projectRepository.findOneBy({
+      name,
+    });
+
+    if (existProject) {
+      return Promise.reject({name});
+    }
 
     const newProject = new Project();
     newProject.id = v4();
@@ -26,6 +34,41 @@ export class ProjectRepository {
     await projectRepository.save(newProject);
 
     return newProject;
+  };
+
+  public update = async (
+    projectId: string,
+    update: Partial<Project>,
+  ): Promise<void> => {
+    const dataSource = await databaseService.getDataSource();
+
+    const projectRepository = dataSource.getRepository(Project);
+
+    let updateProject = await projectRepository.findOneBy({id: projectId});
+
+    updateProject = {...updateProject, ...update};
+
+    const {name} = updateProject;
+
+    const existProject = await projectRepository.findOneBy({
+      name,
+    });
+
+    if (existProject) {
+      return Promise.reject({name});
+    }
+
+    await projectRepository.save(updateProject);
+  };
+
+  public remove = async (projectId: string): Promise<void> => {
+    const dataSource = await databaseService.getDataSource();
+
+    const projectRepository = dataSource.getRepository(Project);
+
+    let project = await projectRepository.findOneBy({id: projectId});
+
+    await projectRepository.remove(project);
   };
 }
 

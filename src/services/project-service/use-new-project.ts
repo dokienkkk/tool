@@ -11,7 +11,6 @@ export function useNewProject(): [
   string,
   (name: string) => void,
   () => void,
-  //   boolean,
 ] {
   const [translate] = useTranslation();
 
@@ -28,7 +27,14 @@ export function useNewProject(): [
       showWarning(translate('project.error.name'));
       return;
     }
-    await projectRepository.create(nameProject);
+    try {
+      await projectRepository.create(nameProject.trim());
+    } catch (error) {
+      if (error?.name && typeof error?.name === 'string') {
+        showWarning(translate('project.error.existName', {name: error?.name}));
+      }
+      return;
+    }
     setNameProject('');
     showInfo(translate('project.create.success'));
     closeModal();
@@ -41,6 +47,5 @@ export function useNewProject(): [
     nameProject,
     handleChangeName,
     handleCreateNewProject,
-    // reload,
   ];
 }

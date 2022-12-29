@@ -9,7 +9,10 @@
     "project.info" : "Thông tin dự án ",
     "project.none" : "Chưa có dự án",
     "project.error.name" : "Tên project không được để trống",
+    "project.error.existName" : "Tên {{name}} đã tồn tại",
     "project.create.success" : "Tạo project thành công",
+    "project.update.success" : "Cập nhật project thành công",
+    "project.update.name" : "Đổi tên dự án",
     "action.cancel" : "Hủy",
     "action.confirm" : "Xác nhận",
     "action.ok" : "OK",
@@ -25,5 +28,6 @@
     "update" : "Cập nhật",
     "universe.add" : "Thêm universe",
     "universe.name" : "Universe",
+    "universe.enterQuantity" : "Số lượng",
     "quantity" : "Số lượng"
 }
