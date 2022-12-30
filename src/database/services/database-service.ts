@@ -3,6 +3,15 @@ import {DataSource} from 'typeorm/browser';
 import {DB_LOCATION, DB_NAME} from '../config';
 import * as Model from '../model';
 
+const AppDataSource = new DataSource({
+  type: 'react-native',
+  database: DB_NAME,
+  location: DB_LOCATION,
+  logging: ['error', 'query'],
+  // synchronize: true,
+  entities: Object.values(Model),
+});
+
 export class DatabaseService {
   private dataSource: DataSource = null;
 
@@ -18,15 +27,6 @@ export class DatabaseService {
         console.log(error);
       }
     }
-
-    const AppDataSource = new DataSource({
-      type: 'react-native',
-      database: DB_NAME,
-      location: DB_LOCATION,
-      logging: ['error'],
-      // synchronize: true,
-      entities: Object.values(Model),
-    });
 
     return AppDataSource.initialize()
       .then((dataSource: DataSource) => {

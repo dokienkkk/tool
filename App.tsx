@@ -17,6 +17,7 @@ import {setJSExceptionHandler} from 'react-native-exception-handler';
 import {globalState} from './src/app/global-state';
 import {databaseService} from './src/database/services/database-service';
 import {AppState} from 'react-native';
+import {bluetoothSevice} from './src/services/bluetooth-service';
 
 setJSExceptionHandler((error, isFatal) => {
   // eslint-disable-next-line no-console
@@ -24,6 +25,7 @@ setJSExceptionHandler((error, isFatal) => {
 });
 
 const RootComponent: FC = () => {
+  bluetoothSevice.checkPermission();
   return (
     <SafeAreaProvider>
       <NavigationContainer>

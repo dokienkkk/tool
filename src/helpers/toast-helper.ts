@@ -16,7 +16,7 @@ export const showSuccess = (title: string, option?: Options) => {
 };
 
 export const showError = (title: string, option?: Options) => {
-  RNToasty.Success({
+  RNToasty.Error({
     title,
     ...defaultOption,
     ...option,
