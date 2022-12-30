@@ -15,6 +15,12 @@ import UniverseSetAddressScreen from '../UniverseSetAddressScreen/UniverseSetAdd
 import {projectService} from '../../services/project-service';
 import {universeService} from '../../services/universe-service';
 import type {Universe} from '../../database/model';
+import {WheelPicker} from 'react-native-wheel-picker-android';
+import {quantityUniverse} from '../../config/universe';
+
+const dataQuantity = [
+  ...Array.from({length: quantityUniverse}, (_, i) => (i + 1).toString()),
+];
 
 interface ProjectDetailScreenProps extends NativeStackScreenProps<any> {}
 
@@ -27,6 +33,8 @@ const ProjectDetailScreen: FC<ProjectDetailScreenProps> = (
 
   const [translate] = useTranslation();
 
+  const [index, setIndex] = React.useState<number>(0);
+
   const [
     isVisible,
     openModal,
@@ -36,8 +44,14 @@ const ProjectDetailScreen: FC<ProjectDetailScreenProps> = (
     handleSaveProject,
   ] = projectService.useUpdateProject(project);
 
-  const [listUniverse, , isVisibleAdd, openModalAdd, closeModalAdd] =
-    universeService.useUniverseList(project);
+  const [
+    listUniverse,
+    ,
+    isVisibleAdd,
+    openModalAdd,
+    closeModalAdd,
+    handleCreateUniverses,
+  ] = universeService.useUniverseList(project);
 
   const handleGoToUniverseSetAddressScreen = React.useCallback(() => {
     navigation.navigate(UniverseSetAddressScreen.name, {
@@ -47,15 +61,27 @@ const ProjectDetailScreen: FC<ProjectDetailScreenProps> = (
     });
   }, [navigation]);
 
+  const handleCreateNewUniverses = React.useCallback(async () => {
+    await handleCreateUniverses(Number(dataQuantity[index]));
+    setIndex(0);
+  }, [handleCreateUniverses, index]);
+
+  const handleCloseModalAdd = React.useCallback(() => {
+    setIndex(0);
+    closeModalAdd();
+  }, [closeModalAdd]);
+
   const renderItem = React.useCallback(
     ({item}: {item: Universe}) => (
-      <TouchableBlock
-        key={item.id}
-        left={<UniverseIcon color={Colors.blue} />}
-        label={item.name}
-        style={shareStyles.boxShadow}
-        onPress={handleGoToUniverseSetAddressScreen}
-      />
+      <View style={styles.block}>
+        <TouchableBlock
+          key={item.id}
+          left={<UniverseIcon color={Colors.blue} />}
+          label={item.name}
+          style={shareStyles.boxShadow}
+          onPress={handleGoToUniverseSetAddressScreen}
+        />
+      </View>
     ),
     [handleGoToUniverseSetAddressScreen],
   );
@@ -72,9 +98,11 @@ const ProjectDetailScreen: FC<ProjectDetailScreenProps> = (
       goBack={navigation.goBack}
       right={<AddButton />}
       onPressIconRight={openModalAdd}>
-      <View style={shareStyles.defaultBackground}>
+      <View style={[styles.container]}>
         <FlatList
-          data={listUniverse}
+          data={listUniverse.sort((universeA, universeB) => {
+            return universeA.index - universeB.index;
+          })}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
@@ -84,19 +112,30 @@ const ProjectDetailScreen: FC<ProjectDetailScreenProps> = (
       <CustomModal
         isVisible={isVisibleAdd}
         title={translate('universe.add')}
-        onBackdropPress={closeModalAdd}
+        onBackdropPress={handleCloseModalAdd}
         labelPrimary={translate('action.add')}
         labelSecondary={translate('action.cancel')}
-        onPressSecondary={closeModalAdd}
-        onPressPrimary={() => {}}>
+        onPressSecondary={handleCloseModalAdd}
+        onPressPrimary={handleCreateNewUniverses}>
         <View style={styles.flexRow}>
-          <Text style={shareStyles.textBold}>{translate('quantity')}</Text>
-          <TextInput
-            style={[styles.input, shareStyles.w100, shareStyles.textRegular]}
-            placeholder={translate('universe.enterQuantity')}
-            value={'1'}
-            onChangeText={handleChangeName}
-          />
+          <View style={shareStyles.w50}>
+            <Text style={[shareStyles.textBold, styles.text]}>
+              {translate('universe.name')}
+            </Text>
+          </View>
+          <View style={[shareStyles.w50, styles.wheelPicker]}>
+            <WheelPicker
+              data={dataQuantity}
+              onItemSelected={setIndex}
+              selectedItemTextFontFamily={'Quicksand-Bold'}
+              itemTextFontFamily={'Quicksand-Regular'}
+              isCyclic={true}
+              selectedItemTextColor={Colors.blue}
+              selectedItemTextSize={20}
+              itemTextSize={14}
+              hideIndicator={true}
+            />
+          </View>
         </View>
       </CustomModal>
 
@@ -123,12 +162,30 @@ const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    maxHeight: 180,
+  },
+  container: {
+    flex: 1,
+    padding: 12,
   },
   input: {
     borderColor: Colors.gray,
     borderBottomWidth: 0.5,
     height: 60,
     color: Colors.black,
+  },
+  text: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: Colors.blue,
+  },
+  wheelPicker: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  block: {
+    marginTop: 4,
+    padding: 4,
   },
 });
 

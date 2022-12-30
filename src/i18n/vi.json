@@ -28,6 +28,8 @@
     "update" : "Cập nhật",
     "universe.add" : "Thêm universe",
     "universe.name" : "Universe",
+    "universe.error.exist" : "Universe {{index}} đã tồn tại",
+    "universe.create.success" : "Tạo Universe thành công",
     "universe.enterQuantity" : "Số lượng",
     "quantity" : "Số lượng"
 }

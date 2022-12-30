@@ -29,5 +29,7 @@
     "universe.add" : "Add universe",
     "universe.name" : "Universe",
     "universe.enterQuantity" : "Quantity",
+    "universe.error.exist" : "Universe {{index}} already exists",
+    "universe.create.success" : "Create Universe successful",
     "quantity" : "Quantity"
 }

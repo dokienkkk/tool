@@ -8,6 +8,9 @@ export class Universe {
   @Column('text', {name: 'name'})
   name: string;
 
+  @Column('integer', {name: 'index'})
+  index: number;
+
   @Column('text', {name: 'projectId'})
   projectId: string;
 

@@ -30,6 +30,7 @@
     "react-native-tab-view": "^3.3.4",
     "react-native-toasty": "https://github.com/dokienkkk/react-native-toasty.git",
     "react-native-vector-icons": "^9.2.0",
+    "react-native-wheel-picker-android": "^2.0.6",
     "reactn": "^2.2.7",
     "typeorm": "^0.3.11",
     "uuid": "^9.0.0"
