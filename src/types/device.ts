@@ -7,5 +7,5 @@ export enum DeviceType {
 export interface Device {
   type: number;
   name: string;
-  address: number;
+  elements: number;
 }

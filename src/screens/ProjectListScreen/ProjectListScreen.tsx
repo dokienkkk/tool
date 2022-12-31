@@ -4,19 +4,19 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import ProjectDetailScreen from 'src/screens/ProjectDetailScreen/ProjectDetailScreen';
-import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
-import AddButton from '../../icons/AddButton';
-import Colors from '../../styles/Colors';
-import CustomModal from '../../components/CustomModal/CustomModal';
-import shareStyles from '../../styles';
-import TouchableBlock from '../../components/TouchableBlock/TouchableBlock';
-import ProjectItemIcon from '../../icons/ProjectItemIcon';
-import {numberOfLines} from '../../helpers/string-helper';
-import {projectService} from '../../services/project-service';
-import DMXIcon from '../../icons/DMXIcon';
-import type {Project} from '../../database/model';
-import {TABBAR_HEIGHT} from '../../config/tab-bar';
-import {bluetoothSevice} from 'src/services/bluetooth-service';
+import DefaultLayout from 'src/components/DefaultLayout/DefaultLayout';
+import AddButton from 'src/icons/AddButton';
+import Colors from 'src/styles/Colors';
+import CustomModal from 'src/components/CustomModal/CustomModal';
+import shareStyles from 'src/styles';
+import TouchableBlock from 'src/components/TouchableBlock/TouchableBlock';
+import ProjectItemIcon from 'src/icons/ProjectItemIcon';
+import {numberOfLines} from 'src/helpers/string-helper';
+import {projectService} from 'src/services/project-service';
+import DMXIcon from 'src/icons/DMXIcon';
+import type {Project} from 'src/database/model';
+import {TABBAR_HEIGHT} from 'src/config/tab-bar';
+import {bluetoothSevice} from 'src/services/bluetooth-permission-service';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
 

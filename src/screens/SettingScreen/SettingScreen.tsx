@@ -2,18 +2,19 @@ import {View, Text, StyleSheet} from 'react-native';
 import type {FC} from 'react';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
-import Colors from '../../styles/Colors';
-import shareStyles from '../../styles';
-import TouchableBlock from '../../components/TouchableBlock/TouchableBlock';
-import LanguageIcon from '../../icons/LanguageIcon';
-import ArrowRight from '../../icons/ArrowRight';
-import ProjectSettingIcon from '../../icons/ProjectSettingIcon';
-import BluetoothIcon from '../../icons/BlueToothIcon';
-import ImportIcon from '../../icons/ImportIcon';
+import DefaultLayout from 'src/components/DefaultLayout/DefaultLayout';
+import Colors from 'src/styles/Colors';
+import shareStyles from 'src/styles';
+import TouchableBlock from 'src/components/TouchableBlock/TouchableBlock';
+import LanguageIcon from 'src/icons/LanguageIcon';
+import ArrowRight from 'src/icons/ArrowRight';
+import ProjectSettingIcon from 'src/icons/ProjectSettingIcon';
+import BluetoothIcon from 'src/icons/BlueToothIcon';
+import ImportIcon from 'src/icons/ImportIcon';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import ChangeLanguageScreen from '../ChangeLanguageScreen/ChangeLanguageScreen';
-import UpdateIcon from '../../icons/UpdateIcon';
+import UpdateIcon from 'src/icons/UpdateIcon';
+import ScanDeviceScreen from '../ScanDeviceScreen/ScanDeviceScreen';
 
 interface SettingScreenProps extends NativeStackScreenProps<any> {}
 
@@ -24,6 +25,10 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
 
   const handleGoToChangeLanguageScreen = React.useCallback(() => {
     navigation.navigate(ChangeLanguageScreen.name);
+  }, [navigation]);
+
+  const handleGoToScanDeviceScreen = React.useCallback(() => {
+    navigation.navigate(ScanDeviceScreen.name);
   }, [navigation]);
 
   return (
@@ -47,6 +52,7 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
             label={translate('bluetooth.connection')}
             left={<BluetoothIcon color={Colors.blue} />}
             right={<ArrowRight color={Colors.blue} />}
+            onPress={handleGoToScanDeviceScreen}
           />
           <TouchableBlock
             label={translate('file.import')}
