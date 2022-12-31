@@ -12,10 +12,10 @@ import ProjectSettingIcon from 'src/icons/ProjectSettingIcon';
 import BluetoothIcon from 'src/icons/BlueToothIcon';
 import ImportIcon from 'src/icons/ImportIcon';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import ChangeLanguageScreen from '../ChangeLanguageScreen/ChangeLanguageScreen';
+import ChangeLanguageScreen from 'src/screens/ChangeLanguageScreen/ChangeLanguageScreen';
 import UpdateIcon from 'src/icons/UpdateIcon';
-import ScanDeviceScreen from '../ScanDeviceScreen/ScanDeviceScreen';
-import SettingProjectListScreen from '../SettingProjectListScreen/SettingProjectListScreen';
+import ScanDeviceScreen from 'src/screens/ScanDeviceScreen/ScanDeviceScreen';
+import SettingProjectListScreen from 'src/screens/SettingProjectListScreen/SettingProjectListScreen';
 
 interface SettingScreenProps extends NativeStackScreenProps<any> {}
 

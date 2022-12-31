@@ -20,6 +20,8 @@ interface CustomModalProps {
   onPressPrimary?: () => void;
 
   onPressSecondary?: () => void;
+
+  isConfirmDelete?: boolean;
 }
 
 const CustomModal: FC<PropsWithChildren<CustomModalProps>> = (
@@ -34,6 +36,7 @@ const CustomModal: FC<PropsWithChildren<CustomModalProps>> = (
     labelSecondary,
     onPressPrimary,
     onPressSecondary,
+    isConfirmDelete,
   } = props;
   return (
     <Modal
@@ -43,25 +46,46 @@ const CustomModal: FC<PropsWithChildren<CustomModalProps>> = (
       animationOut="bounceOut">
       <View style={styles.container}>
         <View style={styles.modal}>
-          <View style={[styles.header, shareStyles.w100]}>
+          <View
+            style={[
+              styles.header,
+              shareStyles.w100,
+              {backgroundColor: isConfirmDelete ? Colors.danger : Colors.blue},
+            ]}>
             <Text style={[shareStyles.textBold, styles.title]}>{title}</Text>
           </View>
           <View style={[shareStyles.w100, styles.body]}>{children}</View>
           <View style={styles.footer}>
             <View style={shareStyles.w50}>
-              <CustomButton
-                label={labelSecondary}
-                onPress={onPressSecondary}
-                isDangerColor={true}
-              />
+              {isConfirmDelete ? (
+                <CustomButton
+                  label={labelSecondary}
+                  onPress={onPressSecondary}
+                  styleLabel={[{color: Colors.blue}, styles.fontSize16]}
+                />
+              ) : (
+                <CustomButton
+                  label={labelSecondary}
+                  onPress={onPressSecondary}
+                  isDangerColor={true}
+                />
+              )}
             </View>
             <View style={shareStyles.w50}>
-              <CustomButton
-                label={labelPrimary}
-                onPress={onPressPrimary}
-                style={[{backgroundColor: Colors.blue}]}
-                styleLabel={{color: Colors.white}}
-              />
+              {isConfirmDelete ? (
+                <CustomButton
+                  label={labelPrimary}
+                  onPress={onPressPrimary}
+                  styleLabel={[{color: Colors.danger}, styles.fontSize16]}
+                />
+              ) : (
+                <CustomButton
+                  label={labelPrimary}
+                  onPress={onPressPrimary}
+                  style={[{backgroundColor: Colors.blue}]}
+                  styleLabel={[{color: Colors.white}]}
+                />
+              )}
             </View>
           </View>
         </View>
@@ -106,6 +130,9 @@ const styles = StyleSheet.create({
   cancel: {
     borderColor: Colors.danger,
     borderWidth: 0.5,
+  },
+  fontSize16: {
+    fontSize: 16,
   },
 });
 

@@ -9,6 +9,7 @@ import shareStyles from 'src/styles';
 import CustomButton from 'src/components/CustomButton/CustomButton';
 import Colors from 'src/styles/Colors';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 
 interface ScanDeviceScreenProps extends NativeStackScreenProps<any> {}
 
@@ -18,6 +19,8 @@ const ScanDeviceScreen: FC<ScanDeviceScreenProps> = (
   useBackHandler();
 
   const {navigation} = props;
+
+  const [translate] = useTranslation();
 
   const handleGoToSettingScreen = React.useCallback(() => {
     navigation.goBack();
@@ -36,17 +39,17 @@ const ScanDeviceScreen: FC<ScanDeviceScreenProps> = (
         style={styles.linearGradient}>
         <SafeAreaView style={styles.container}>
           <Text style={[shareStyles.textBold, styles.title]}>
-            Quét thiết bị
+            {translate('scan')}
           </Text>
           <View style={styles.footer}>
             <CustomButton
               style={styles.button}
-              label="Tìm kiếm"
+              label={translate('search')}
               styleLabel={styles.label}
             />
             <CustomButton
               style={styles.button}
-              label="Quay lại"
+              label={translate('goBack')}
               styleLabel={styles.label}
               onPress={handleGoToSettingScreen}
             />

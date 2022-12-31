@@ -15,7 +15,6 @@ import {numberOfLines} from 'src/helpers/string-helper';
 import {projectService} from 'src/services/project-service';
 import DMXIcon from 'src/icons/DMXIcon';
 import type {Project} from 'src/database/model';
-import {TABBAR_HEIGHT} from 'src/config/tab-bar';
 import {bluetoothSevice} from 'src/services/bluetooth-permission-service';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
@@ -78,7 +77,7 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
             renderItem={renderItem}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingBottom: TABBAR_HEIGHT + 12}}
+            contentContainerStyle={styles.footer}
           />
         ) : (
           <View style={[styles.center]}>
@@ -88,7 +87,6 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
             </Text>
           </View>
         )}
-        <View style={styles.footer} />
       </View>
 
       <CustomModal
@@ -140,7 +138,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   footer: {
-    height: TABBAR_HEIGHT,
+    paddingBottom: 16,
   },
 });
 

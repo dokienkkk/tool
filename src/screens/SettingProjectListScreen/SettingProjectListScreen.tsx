@@ -11,6 +11,7 @@ import ArrowRight from 'src/icons/ArrowRight';
 import {projectService} from 'src/services/project-service';
 import {numberOfLines} from 'src/helpers/string-helper';
 import type {ProjectWithQuantity} from 'src/services/project-service/use-project-list';
+import SettingProjectDetailScreen from '../SettingProjectDetailScreen/SettingProjectDetailScreen';
 
 interface SettingProjectListScreenProps extends NativeStackScreenProps<any> {}
 
@@ -27,19 +28,31 @@ const SettingProjectListScreen: FC<SettingProjectListScreenProps> = (
     navigation.goBack();
   }, [navigation]);
 
+  const handleGoToSettingProjectDetailScreen = React.useCallback(
+    (project: ProjectWithQuantity) => {
+      navigation.navigate(SettingProjectDetailScreen.name, {
+        project,
+      });
+    },
+    [navigation],
+  );
+
   const renderItem = React.useCallback(
     ({item}: {item: ProjectWithQuantity}) => {
       return (
         <TouchableBlock
           key={item.id}
           style={styles.block}
-          label={numberOfLines(item.name, 30)}
-          subLabel={`${item.numberOfUniverse} universe`}
+          label={numberOfLines(item.name, 27)}
+          subLabel={`${item.numberOfUniverse ?? 0} universe`}
           right={<ArrowRight color={Colors.blue} />}
+          onPress={() => {
+            handleGoToSettingProjectDetailScreen(item);
+          }}
         />
       );
     },
-    [],
+    [handleGoToSettingProjectDetailScreen],
   );
   return (
     <DefaultLayout
@@ -47,7 +60,7 @@ const SettingProjectListScreen: FC<SettingProjectListScreenProps> = (
       goBack={handleGoToSettingScreen}
       title={translate('projects')}
       headerColor={Colors.background}>
-      <View style={shareStyles.defaultBackground}>
+      <View style={[shareStyles.defaultBackground]}>
         <FlatList
           data={listProject}
           renderItem={renderItem}

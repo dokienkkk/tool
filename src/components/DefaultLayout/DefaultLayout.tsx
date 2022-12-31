@@ -1,10 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import type {FC, PropsWithChildren, ReactElement} from 'react';
 import React from 'react';
 import Colors from '../../styles/Colors';
@@ -31,8 +25,6 @@ interface DefaultLayoutProps {
 
   headerColor?: string;
 }
-
-const {width, height} = Dimensions.get('screen');
 
 const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
   props: PropsWithChildren<DefaultLayoutProps>,
@@ -118,8 +110,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   container: {
-    width,
-    height,
+    width: '100%',
+    height: '100%',
   },
   header: {
     backgroundColor: Colors.blue,

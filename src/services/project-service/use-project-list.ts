@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import type {Project} from 'src/database/model/Project';
 import {projectRepository} from 'src/repositories/project-repository';
@@ -8,6 +9,8 @@ export interface ProjectWithQuantity extends Project {
 }
 
 export function useProjectList(): [ProjectWithQuantity[], () => Promise<void>] {
+  const navigation = useNavigation();
+
   const [list, setList] = React.useState([]);
 
   const getListProject = React.useCallback(async () => {
@@ -27,8 +30,10 @@ export function useProjectList(): [ProjectWithQuantity[], () => Promise<void>] {
     // projectRepository.list().then((listPoject: Project[]) => {
     //   setList(listPoject);
     // });
-    getListProject();
-  }, [getListProject]);
+    navigation.addListener('focus', () => {
+      getListProject();
+    });
+  }, [getListProject, navigation]);
 
   return [list, getListProject];
 }

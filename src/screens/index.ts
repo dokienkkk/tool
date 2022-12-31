@@ -11,3 +11,5 @@ export {default as UniverseSetAddressScreen} from 'src/screens/UniverseSetAddres
 export {default as ScanDeviceScan} from 'src/screens/ScanDeviceScreen/ScanDeviceScreen';
 
 export {default as SettingProjectListScreen} from 'src/screens/SettingProjectListScreen/SettingProjectListScreen';
+
+export {default as SettingProjectDetailScreen} from 'src/screens/SettingProjectDetailScreen/SettingProjectDetailScreen';
