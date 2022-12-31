@@ -56,6 +56,25 @@ export class UniverseRepository {
 
     return newUniverse;
   };
+
+  public removeAll = async (projectId: string): Promise<void> => {
+    const dataSource = await databaseService.getDataSource();
+
+    const universeRepository = dataSource.getRepository(Universe);
+
+    const listUniverse = await universeRepository.findBy({
+      projectId: projectId,
+    });
+
+    const listUniverseIds = listUniverse.map(universe => universe.id);
+
+    await universeRepository
+      .createQueryBuilder()
+      .delete()
+      .from(Universe)
+      .where('id IN (:...ids)', {ids: listUniverseIds})
+      .execute();
+  };
 }
 
 export const universeRepository = new UniverseRepository();

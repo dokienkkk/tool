@@ -49,65 +49,68 @@ const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
     );
   }
   return (
-    <View style={styles.bgWhite}>
-      <SafeAreaView style={styles.container}>
-        <View
-          style={[
-            styles.header,
-            {backgroundColor: headerColor ? headerColor : Colors.blue},
-          ]}>
-          {left && (
-            <TouchableOpacity onPress={goBack}>
-              <BackButton color={headerColor ? Colors.blue : Colors.white} />
-            </TouchableOpacity>
-          )}
-
-          {edit ? (
-            <>
-              <TouchableOpacity onPress={onEdit} style={styles.flexRow}>
-                <Text
-                  style={[
-                    styles.title,
-                    shareStyles.textBold,
-                    {color: headerColor ? Colors.blue : Colors.white},
-                  ]}>
-                  {title}
-                </Text>
-                <View style={styles.editIcon}>
-                  <EditIcon />
-                </View>
+    <>
+      {/* <StatusBar hidden={true} /> */}
+      <View style={styles.bgWhite}>
+        <SafeAreaView style={styles.container}>
+          <View
+            style={[
+              styles.header,
+              {backgroundColor: headerColor ? headerColor : Colors.blue},
+            ]}>
+            {left && (
+              <TouchableOpacity onPress={goBack}>
+                <BackButton color={headerColor ? Colors.blue : Colors.white} />
               </TouchableOpacity>
-            </>
-          ) : (
-            <Text
-              style={[
-                styles.title,
-                shareStyles.textBold,
-                {color: headerColor ? Colors.blue : Colors.white},
-              ]}>
-              {title}
-            </Text>
-          )}
+            )}
 
-          {right && onPressIconRight ? (
-            <TouchableOpacity
-              onPress={onPressIconRight}
-              style={styles.headerRight}>
-              {right}
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.headerRight}>{right}</View>
-          )}
-        </View>
-        <View style={styles.body}>{children}</View>
-      </SafeAreaView>
-    </View>
+            {edit ? (
+              <>
+                <TouchableOpacity onPress={onEdit} style={styles.flexRow}>
+                  <Text
+                    style={[
+                      styles.title,
+                      shareStyles.textBold,
+                      {color: headerColor ? Colors.blue : Colors.white},
+                    ]}>
+                    {title}
+                  </Text>
+                  <View style={styles.editIcon}>
+                    <EditIcon />
+                  </View>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <Text
+                style={[
+                  styles.title,
+                  shareStyles.textBold,
+                  {color: headerColor ? Colors.blue : Colors.white},
+                ]}>
+                {title}
+              </Text>
+            )}
+
+            {right && onPressIconRight ? (
+              <TouchableOpacity
+                onPress={onPressIconRight}
+                style={styles.headerRight}>
+                {right}
+              </TouchableOpacity>
+            ) : (
+              <View style={styles.headerRight}>{right}</View>
+            )}
+          </View>
+          <View style={styles.body}>{children}</View>
+        </SafeAreaView>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   bgWhite: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.blue,
   },
   container: {
     width: '100%',
@@ -117,8 +120,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     height: 80,
     paddingLeft: 20,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
   },
