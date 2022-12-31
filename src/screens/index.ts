@@ -9,3 +9,5 @@ export {default as ChangeLanguageScreen} from 'src/screens/ChangeLanguageScreen/
 export {default as UniverseSetAddressScreen} from 'src/screens/UniverseSetAddressScreen/UniverseSetAddressScreen';
 
 export {default as ScanDeviceScan} from 'src/screens/ScanDeviceScreen/ScanDeviceScreen';
+
+export {default as SettingProjectListScreen} from 'src/screens/SettingProjectListScreen/SettingProjectListScreen';

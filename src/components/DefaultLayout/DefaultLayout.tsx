@@ -28,6 +28,8 @@ interface DefaultLayoutProps {
   goBack?: () => void;
 
   onPressIconRight?: () => void;
+
+  headerColor?: string;
 }
 
 const {width, height} = Dimensions.get('screen');
@@ -35,8 +37,17 @@ const {width, height} = Dimensions.get('screen');
 const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
   props: PropsWithChildren<DefaultLayoutProps>,
 ) => {
-  const {left, right, children, goBack, onPressIconRight, title, edit, onEdit} =
-    props;
+  const {
+    left,
+    right,
+    children,
+    goBack,
+    onPressIconRight,
+    title,
+    edit,
+    onEdit,
+    headerColor,
+  } = props;
 
   const rightChilds = React.Children.toArray(right);
 
@@ -48,17 +59,26 @@ const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
   return (
     <View style={styles.bgWhite}>
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
+        <View
+          style={[
+            styles.header,
+            {backgroundColor: headerColor ? headerColor : Colors.blue},
+          ]}>
           {left && (
             <TouchableOpacity onPress={goBack}>
-              <BackButton color={Colors.white} />
+              <BackButton color={headerColor ? Colors.blue : Colors.white} />
             </TouchableOpacity>
           )}
 
           {edit ? (
             <>
               <TouchableOpacity onPress={onEdit} style={styles.flexRow}>
-                <Text style={[styles.title, shareStyles.textBold]}>
+                <Text
+                  style={[
+                    styles.title,
+                    shareStyles.textBold,
+                    {color: headerColor ? Colors.blue : Colors.white},
+                  ]}>
                   {title}
                 </Text>
                 <View style={styles.editIcon}>
@@ -67,7 +87,14 @@ const DefaultLayout: FC<PropsWithChildren<DefaultLayoutProps>> = (
               </TouchableOpacity>
             </>
           ) : (
-            <Text style={[styles.title, shareStyles.textBold]}>{title}</Text>
+            <Text
+              style={[
+                styles.title,
+                shareStyles.textBold,
+                {color: headerColor ? Colors.blue : Colors.white},
+              ]}>
+              {title}
+            </Text>
           )}
 
           {right && onPressIconRight ? (

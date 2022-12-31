@@ -15,6 +15,7 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import ChangeLanguageScreen from '../ChangeLanguageScreen/ChangeLanguageScreen';
 import UpdateIcon from 'src/icons/UpdateIcon';
 import ScanDeviceScreen from '../ScanDeviceScreen/ScanDeviceScreen';
+import SettingProjectListScreen from '../SettingProjectListScreen/SettingProjectListScreen';
 
 interface SettingScreenProps extends NativeStackScreenProps<any> {}
 
@@ -22,6 +23,10 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
   const {navigation} = props;
 
   const [translate] = useTranslation();
+
+  const handleGoToSettingProjectListScreen = React.useCallback(() => {
+    navigation.navigate(SettingProjectListScreen.name);
+  }, [navigation]);
 
   const handleGoToChangeLanguageScreen = React.useCallback(() => {
     navigation.navigate(ChangeLanguageScreen.name);
@@ -42,6 +47,7 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
             label={translate('project.setting')}
             left={<ProjectSettingIcon color={Colors.blue} />}
             right={<ArrowRight color={Colors.blue} />}
+            onPress={handleGoToSettingProjectListScreen}
           />
         </View>
         <Text style={[styles.sectionTitle, shareStyles.textRegular]}>

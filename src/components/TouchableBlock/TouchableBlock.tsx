@@ -14,19 +14,28 @@ interface TouchableBlockProps {
   label?: string;
 
   style?: StyleProp<any>;
+
+  subLabel?: string;
 }
 
 const TouchableBlock: FC<TouchableBlockProps> = (
   props: TouchableBlockProps,
 ) => {
-  const {onPress, label, left, right, style} = props;
+  const {onPress, label, left, right, style, subLabel} = props;
 
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[shareStyles.w100, styles.block, StyleSheet.flatten(style)]}>
       {left && <View style={styles.left}>{left}</View>}
-      <Text style={[shareStyles.textRegular, styles.label]}>{label}</Text>
+      <View>
+        <Text style={[shareStyles.textRegular, styles.label]}>{label}</Text>
+        {subLabel && (
+          <Text style={[shareStyles.textRegular, styles.subLabel]}>
+            {subLabel}
+          </Text>
+        )}
+      </View>
       {right && <View style={styles.right}>{right}</View>}
     </TouchableOpacity>
   );
@@ -51,6 +60,12 @@ const styles = StyleSheet.create({
   },
   right: {
     marginLeft: 'auto',
+  },
+  subLabel: {
+    fontSize: 14,
+    lineHeight: 14,
+    color: Colors.green,
+    marginTop: 8,
   },
 });
 

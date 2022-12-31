@@ -1,20 +1,34 @@
 import React from 'react';
 import type {Project} from 'src/database/model/Project';
 import {projectRepository} from 'src/repositories/project-repository';
+import {universeRepository} from 'src/repositories/universe-repository';
 
-export function useProjectList(): [Project[], () => Promise<void>] {
+export interface ProjectWithQuantity extends Project {
+  numberOfUniverse: number;
+}
+
+export function useProjectList(): [ProjectWithQuantity[], () => Promise<void>] {
   const [list, setList] = React.useState([]);
 
   const getListProject = React.useCallback(async () => {
     const listProject = await projectRepository.list();
-    setList(listProject);
+    var result = await Promise.all(
+      listProject.map(
+        async (project: Project): Promise<ProjectWithQuantity> => {
+          const listUniverse = await universeRepository.count(project);
+          return {...project, numberOfUniverse: listUniverse};
+        },
+      ),
+    );
+    setList(result);
   }, []);
 
   React.useEffect(() => {
-    projectRepository.list().then((listPoject: Project[]) => {
-      setList(listPoject);
-    });
-  }, []);
+    // projectRepository.list().then((listPoject: Project[]) => {
+    //   setList(listPoject);
+    // });
+    getListProject();
+  }, [getListProject]);
 
   return [list, getListProject];
 }
