@@ -3,7 +3,7 @@ import type {FC} from 'react';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import ProjectDetailScreen from '../ProjectDetailScreen/ProjectDetailScreen';
+import ProjectDetailScreen from 'src/screens/ProjectDetailScreen/ProjectDetailScreen';
 import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
 import AddButton from '../../icons/AddButton';
 import Colors from '../../styles/Colors';
@@ -16,6 +16,7 @@ import {projectService} from '../../services/project-service';
 import DMXIcon from '../../icons/DMXIcon';
 import type {Project} from '../../database/model';
 import {TABBAR_HEIGHT} from '../../config/tab-bar';
+import {bluetoothSevice} from 'src/services/bluetooth-service';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
 
@@ -62,6 +63,8 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
     ),
     [handleGoToProjectDetailScreen],
   );
+
+  bluetoothSevice.checkPermission();
 
   return (
     <DefaultLayout

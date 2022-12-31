@@ -1,36 +1,32 @@
 import type {AppStateStatus} from 'react-native';
 import {DataSource} from 'typeorm/browser';
-import {DB_LOCATION, DB_NAME} from '../config';
-import * as Model from '../model';
-
-const AppDataSource = new DataSource({
-  type: 'react-native',
-  database: DB_NAME,
-  location: DB_LOCATION,
-  logging: ['error', 'query'],
-  // synchronize: true,
-  entities: Object.values(Model),
-});
+import {DB_LOCATION, DB_NAME} from 'src/database/config';
+import * as Models from 'src/database/model';
 
 export class DatabaseService {
   private dataSource: DataSource = null;
 
   public readonly connectDatabase = async () => {
     if (this.dataSource) {
-      try {
+      if (this.dataSource.isInitialized) {
         await this.dataSource.destroy();
-        this.dataSource = null;
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('Error when destroy connection Database');
-        // eslint-disable-next-line no-console
-        console.log(error);
       }
+      this.dataSource = null;
     }
 
-    return AppDataSource.initialize()
-      .then((dataSource: DataSource) => {
-        this.dataSource = dataSource;
+    const myDataSource = new DataSource({
+      type: 'react-native',
+      database: DB_NAME,
+      location: DB_LOCATION,
+      logging: ['error'],
+      // synchronize: true,
+      entities: Object.values(Models),
+    });
+
+    return myDataSource
+      .initialize()
+      .then(newDataSource => {
+        this.dataSource = newDataSource;
         // eslint-disable-next-line no-console
         console.log('Connected Database!');
       })
@@ -41,16 +37,15 @@ export class DatabaseService {
   };
 
   public readonly getDataSource = async () => {
-    if (this.dataSource === null) {
+    if (!this.dataSource) {
       await this.connectDatabase();
     }
     return this.dataSource;
   };
 
   public readonly destroy = async () => {
-    if (this.dataSource.initialize) {
+    if (this.dataSource?.isInitialized) {
       await this.dataSource.destroy();
-      this.dataSource = null;
       // eslint-disable-next-line no-console
       console.log('TypeORM closed');
     }
@@ -61,11 +56,14 @@ export class DatabaseService {
       switch (state) {
         case 'active':
           if (!this.dataSource.isInitialized) {
-            await this.dataSource.initialize();
+            await this.dataSource.initialize().then(() => {
+              // eslint-disable-next-line no-console
+              console.log('Reconnect Database');
+            });
           }
           break;
         case 'background':
-          await this.destroy();
+          this.destroy();
           break;
       }
     } else {

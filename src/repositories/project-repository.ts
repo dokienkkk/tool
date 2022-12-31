@@ -1,16 +1,20 @@
-import {Project} from '../database/model';
-import {databaseService} from '../database/services/database-service';
+import {Project} from 'src/database/model/Project';
+import {databaseService} from 'src/database/services/database-service';
 import {v4} from 'uuid';
 
 export class ProjectRepository {
   public list = async (): Promise<Project[]> => {
     const dataSource = await databaseService.getDataSource();
 
-    const projectRepository = dataSource.getRepository(Project);
+    if (dataSource.isInitialized) {
+      const projectRepository = dataSource.getRepository(Project);
 
-    const listProject = await projectRepository.find();
+      const listProject = await projectRepository.find();
 
-    return listProject;
+      return listProject;
+    }
+
+    return [];
   };
 
   public create = async (name: string): Promise<Project> => {

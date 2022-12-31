@@ -1,6 +1,6 @@
 import {Entity, Column, PrimaryColumn} from 'typeorm/browser';
 
-@Entity('Project')
+@Entity('project')
 export class Project {
   @PrimaryColumn('uuid', {name: 'id'})
   id: string;
