@@ -31,7 +31,7 @@ export class GlobalState {
   /**
    * Projects
    *
-   * @type {Project[]}
+   * @type {Project}
    */
 
   public get project(): Project {

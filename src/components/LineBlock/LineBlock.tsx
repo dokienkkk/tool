@@ -1,6 +1,6 @@
 import type {StyleProp, ViewProps} from 'react-native';
 import {View, Text, StyleSheet} from 'react-native';
-import type {FC} from 'react';
+import type {FC, ReactElement} from 'react';
 import React from 'react';
 import shareStyles from 'src/styles';
 import Colors from 'src/styles/Colors';
@@ -8,7 +8,7 @@ import Colors from 'src/styles/Colors';
 interface LineBlockProps {
   left?: string;
 
-  right?: string;
+  right?: string | ReactElement;
 
   style?: StyleProp<ViewProps>;
 }
@@ -18,7 +18,11 @@ const LineBlock: FC<LineBlockProps> = (props: LineBlockProps) => {
   return (
     <View style={[shareStyles.w100, styles.block, StyleSheet.flatten(style)]}>
       <Text style={[shareStyles.textBold, styles.textLeft]}>{left}</Text>
-      <Text style={[shareStyles.textRegular, styles.textRight]}>{right}</Text>
+      {typeof right === 'string' ? (
+        <Text style={[shareStyles.textRegular, styles.textRight]}>{right}</Text>
+      ) : (
+        right
+      )}
     </View>
   );
 };

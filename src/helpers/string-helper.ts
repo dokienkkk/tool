@@ -6,3 +6,7 @@ export const numberOfLines = (
 ): string =>
   title.substring(0, lengthTitle ?? DEFAULT_LENGTH) +
   (title.length > (lengthTitle ?? DEFAULT_LENGTH) ? '...' : '');
+
+export const formatNumber = (num: string): string => {
+  return Number(num) < 10 ? '0' + num : num;
+};

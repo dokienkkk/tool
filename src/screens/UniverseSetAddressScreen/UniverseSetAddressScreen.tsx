@@ -1,22 +1,30 @@
-import {View, useWindowDimensions, StyleSheet, Button} from 'react-native';
+import {View, useWindowDimensions, StyleSheet} from 'react-native';
 import type {FC} from 'react';
 import React from 'react';
-import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
+import DefaultLayout from 'src/components/DefaultLayout/DefaultLayout';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import shareStyles from '../../styles';
-import {numberOfLines} from '../../helpers/string-helper';
+import shareStyles from 'src/styles';
+import {numberOfLines} from 'src/helpers/string-helper';
 import {useTranslation} from 'react-i18next';
-import BluetoothIconThin from '../../icons/BluetoothIconThin';
-import Colors from '../../styles/Colors';
+import BluetoothIconThin from 'src/icons/BluetoothIconThin';
+import Colors from 'src/styles/Colors';
 import {SceneMap, TabView} from 'react-native-tab-view';
-import TabInfoIcon from '../../icons/TabInfoIcon';
-import TabSetAddressIcon from '../../icons/TabSetAddressIcon';
-import {TABBAR} from '../../config/tab-bar';
-import TabBarIcon from '../../components/TabBarIcon/TabBarIcon';
-import {globalState} from '../../app/global-state';
-import {STATUS} from '../../types/status';
+import TabInfoIcon from 'src/icons/TabInfoIcon';
+import TabSetAddressIcon from 'src/icons/TabSetAddressIcon';
+import {TABBAR} from 'src/config/tab-bar';
+import TabBarIcon from 'src/components/TabBarIcon/TabBarIcon';
+import {globalState} from 'src/app/global-state';
+import {STATUS} from 'src/types/status';
+import KeepAwake from '@sayem314/react-native-keep-awake';
+import SetAddress from 'src/screens/UniverseSetAddressScreen/components/SetAddress';
+import TableAddress from './components/TableAddress';
 
 interface UniverseSetAddressScreenProps extends NativeStackScreenProps<any> {}
+
+const renderScene = SceneMap({
+  first: TableAddress,
+  second: SetAddress,
+});
 
 const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
   props: UniverseSetAddressScreenProps,
@@ -37,22 +45,6 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
     {key: TABBAR.ROUTE_FIRST.KEY, title: TABBAR.ROUTE_FIRST.TITLE},
     {key: TABBAR.ROUTE_SECOND.KEY, title: TABBAR.ROUTE_SECOND.TITLE},
   ]);
-
-  const test = async () => {
-    await globalState.setBluetoothStatus(STATUS.CONNECTED);
-  };
-
-  const FirstRoute = React.useCallback(
-    () => <Button title={'set bluetooth connected'} onPress={test} />,
-    [],
-  );
-
-  const SecondRoute = React.useCallback(() => null, []);
-
-  const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-  });
 
   const renderTabBar = React.useCallback(() => {
     return (
@@ -90,6 +82,7 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
           color={bluetoothStatus === STATUS.CONNECTED ? Colors.green : 'red'}
         />
       }>
+      <KeepAwake />
       <View style={shareStyles.defaultBackground}>
         <TabView
           navigationState={{index, routes}}
