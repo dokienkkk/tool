@@ -16,6 +16,7 @@ import ChangeLanguageScreen from 'src/screens/ChangeLanguageScreen/ChangeLanguag
 import UpdateIcon from 'src/icons/UpdateIcon';
 import ScanDeviceScreen from 'src/screens/ScanDeviceScreen/ScanDeviceScreen';
 import SettingProjectListScreen from 'src/screens/SettingProjectListScreen/SettingProjectListScreen';
+import ImportFileScreen from 'src/screens/ImportFileScreen/ImportFileScreen';
 
 interface SettingScreenProps extends NativeStackScreenProps<any> {}
 
@@ -34,6 +35,10 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
 
   const handleGoToScanDeviceScreen = React.useCallback(() => {
     navigation.navigate(ScanDeviceScreen.name);
+  }, [navigation]);
+
+  const handleGoToImportFileScreen = React.useCallback(() => {
+    navigation.navigate(ImportFileScreen.name);
   }, [navigation]);
 
   return (
@@ -64,6 +69,7 @@ const SettingScreen: FC<SettingScreenProps> = (props: SettingScreenProps) => {
             label={translate('file.import')}
             left={<ImportIcon color={Colors.blue} />}
             right={<ArrowRight color={Colors.blue} />}
+            onPress={handleGoToImportFileScreen}
           />
         </View>
         <Text style={[styles.sectionTitle, shareStyles.textRegular]}>

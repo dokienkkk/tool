@@ -13,11 +13,16 @@ import Colors from 'src/styles/Colors';
 import CustomButton from 'src/components/CustomButton/CustomButton';
 import {showWarning} from 'src/helpers/toast-helper';
 import {UNIVERSE_ADDRESS} from 'src/config/set-address';
+import {Dropdown} from 'react-native-element-dropdown';
+import {Devices} from 'src/config/device';
+import type {Device} from 'src/types/device';
 
 interface SetAddressProps {}
 
 const SetAddress: FC<SetAddressProps> = () => {
   const [address, setAddress] = React.useState('1');
+
+  const [deviceSelect, setDeviceSelect] = React.useState(0);
 
   const changeAddress = React.useCallback(
     (type: 'increase' | 'decrease') => {
@@ -48,7 +53,34 @@ const SetAddress: FC<SetAddressProps> = () => {
   return (
     <View style={styles.container}>
       <View style={styles.flexGrow}>
-        <LineBlock left="Loại đèn" right="Đèn RGB" />
+        <View style={styles.block}>
+          <Dropdown
+            selectedTextStyle={[
+              shareStyles.textRegular,
+              styles.labelAddress,
+              styles.textRight,
+            ]}
+            itemTextStyle={[shareStyles.textRegular, styles.labelAddress]}
+            data={Devices}
+            labelField="name"
+            valueField="type"
+            value={deviceSelect}
+            onChange={(item: Device) => {
+              setDeviceSelect(item.type);
+            }}
+            maxHeight={300}
+            renderLeftIcon={() => (
+              <Text
+                style={[
+                  shareStyles.w50,
+                  shareStyles.textBold,
+                  styles.labelDropdown,
+                ]}>
+                Loại đèn
+              </Text>
+            )}
+          />
+        </View>
 
         <LineBlock
           left="STT đèn"
@@ -158,8 +190,6 @@ const styles = StyleSheet.create({
   containerAddress: {
     flexGrow: 1,
     backgroundColor: Colors.white,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     height: 40,
     marginHorizontal: 10,
   },
@@ -177,6 +207,19 @@ const styles = StyleSheet.create({
   },
   textCenter: {
     textAlign: 'center',
+  },
+  block: {
+    backgroundColor: Colors.white,
+    height: 52,
+    borderRadius: 4,
+    marginTop: 4,
+    marginBottom: 16,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+  },
+  labelDropdown: {
+    fontSize: 16,
+    color: Colors.blue,
   },
 });
 

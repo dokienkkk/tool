@@ -13,3 +13,5 @@ export {default as ScanDeviceScan} from 'src/screens/ScanDeviceScreen/ScanDevice
 export {default as SettingProjectListScreen} from 'src/screens/SettingProjectListScreen/SettingProjectListScreen';
 
 export {default as SettingProjectDetailScreen} from 'src/screens/SettingProjectDetailScreen/SettingProjectDetailScreen';
+
+export {default as ImportFileScreen} from 'src/screens/ImportFileScreen/ImportFileScreen';

@@ -16,4 +16,4 @@ export class BlueToothPermissionService extends AbstractPermissionService {
   }
 }
 
-export const bluetoothSevice = new BlueToothPermissionService();
+export const bluetoothPermissionSevice = new BlueToothPermissionService();

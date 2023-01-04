@@ -18,6 +18,7 @@ import {STATUS} from 'src/types/status';
 import KeepAwake from '@sayem314/react-native-keep-awake';
 import SetAddress from 'src/screens/UniverseSetAddressScreen/components/SetAddress';
 import TableAddress from './components/TableAddress';
+import BluetoothOff from 'src/icons/BluetoothOff';
 
 interface UniverseSetAddressScreenProps extends NativeStackScreenProps<any> {}
 
@@ -78,9 +79,11 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
       goBack={navigation.goBack}
       title={numberOfLines(universe?.name ?? translate('universe.name'), 30)}
       right={
-        <BluetoothIconThin
-          color={bluetoothStatus === STATUS.CONNECTED ? Colors.green : 'red'}
-        />
+        bluetoothStatus === STATUS.CONNECTED ? (
+          <BluetoothIconThin color={Colors.green} />
+        ) : (
+          <BluetoothOff color={'red'} />
+        )
       }>
       <KeepAwake />
       <View style={shareStyles.defaultBackground}>

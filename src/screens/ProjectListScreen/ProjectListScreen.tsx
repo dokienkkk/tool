@@ -15,7 +15,7 @@ import {numberOfLines} from 'src/helpers/string-helper';
 import {projectService} from 'src/services/project-service';
 import DMXIcon from 'src/icons/DMXIcon';
 import type {Project} from 'src/database/model';
-import {bluetoothSevice} from 'src/services/bluetooth-permission-service';
+import {bluetoothPermissionSevice} from 'src/services/bluetooth-permission-service';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
 
@@ -63,7 +63,7 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
     [handleGoToProjectDetailScreen],
   );
 
-  bluetoothSevice.checkPermission();
+  bluetoothPermissionSevice.checkPermission();
 
   return (
     <DefaultLayout

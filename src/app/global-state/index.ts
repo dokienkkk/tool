@@ -3,6 +3,7 @@ import type {StateTuple} from 'reactn/types/use-global';
 import type {Project} from '../../types/project';
 import type {STATUS} from '../../types/status';
 import {initialize} from './initialize';
+import type {BleManager, Device} from 'react-native-ble-plx';
 
 export class GlobalState {
   public readonly initialize = initialize;
@@ -29,6 +30,26 @@ export class GlobalState {
   }
 
   /**
+   * Connected Device
+   *
+   * @type {Device}
+   */
+  public get connectedDevice(): Device {
+    return React.getGlobal<GlobalState>().connectedDevice;
+  }
+
+  public useConnectedDevice(): StateTuple<GlobalState, 'connectedDevice'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'connectedDevice'>('connectedDevice');
+  }
+
+  public async setConnectedDevice(device: Device) {
+    await React.setGlobal<GlobalState>({
+      connectedDevice: device,
+    });
+  }
+
+  /**
    * Projects
    *
    * @type {Project}
@@ -47,6 +68,27 @@ export class GlobalState {
   public useProjects(): StateTuple<GlobalState, 'project'> {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return React.useGlobal<GlobalState, 'project'>('project');
+  }
+
+  /**
+   * BLE Manager
+   *
+   * @type {BleManager}
+   */
+
+  public get bleManager(): BleManager {
+    return React.getGlobal<GlobalState>().bleManager;
+  }
+
+  public useBleManager(): StateTuple<GlobalState, 'bleManager'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'bleManager'>('bleManager');
+  }
+
+  public async setBleManager(status: STATUS) {
+    await React.setGlobal<GlobalState>({
+      bluetoothStatus: status,
+    });
   }
 }
 
