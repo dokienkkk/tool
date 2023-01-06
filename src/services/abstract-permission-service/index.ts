@@ -29,6 +29,8 @@ export abstract class AbstractPermissionService {
 
   async checkPermission(): Promise<PermissionStatus> {
     const status = await check(this.permission);
+    // eslint-disable-next-line no-console
+    console.log('PERMISSION: ' + status);
     await this.handlePermissionStatus(status);
     return status;
   }

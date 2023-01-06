@@ -1,3 +1,3 @@
-export const RD_NAME_BLUETOOTH = 'RD_SAD';
+export const RD_NAME_BLUETOOTH = 'kMod';
 
-export const RD_SET_ADDRESS = 'Bộ set địa chỉ Rạng Đông';
+export const RD_SET_ADDRESS_DISPLAYNAME = 'Bộ set địa chỉ Rạng Đông';

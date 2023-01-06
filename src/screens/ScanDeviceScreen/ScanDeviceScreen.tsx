@@ -3,8 +3,6 @@ import {
   StyleSheet,
   StatusBar,
   View,
-  // FlatList,
-  // TouchableOpacity,
   ScrollView,
   Pressable,
 } from 'react-native';
@@ -24,7 +22,7 @@ import InfoModal from 'src/components/InfoModal/InfoModal';
 import BluetoothSearchIcon from 'src/icons/BluetoothSearch';
 import {blueToothService} from 'src/services/bluetooth-service';
 import type {Device} from 'react-native-ble-plx';
-import {RD_SET_ADDRESS} from 'src/config/name';
+import {RD_SET_ADDRESS_DISPLAYNAME} from 'src/config/name';
 
 interface ScanDeviceScreenProps extends NativeStackScreenProps<any> {}
 
@@ -70,7 +68,7 @@ const ScanDeviceScreen: FC<ScanDeviceScreenProps> = (
             {loading && (
               <View style={[styles.flexRow]}>
                 <Text style={[shareStyles.textRegular, styles.textSearch]}>
-                  {'Đang tìm kiếm thiết bị '}
+                  {'Đang tìm kiếm Bộ set địa chỉ '}
                 </Text>
                 <Spinner type="Wave" color={Colors.white} />
               </View>
@@ -89,7 +87,7 @@ const ScanDeviceScreen: FC<ScanDeviceScreenProps> = (
                   handleConnectToDevice(device);
                 }}>
                 <Text style={(shareStyles.textBold, styles.deviceName)}>
-                  {RD_SET_ADDRESS}
+                  {RD_SET_ADDRESS_DISPLAYNAME}
                 </Text>
                 <Text style={[shareStyles.textRegular, styles.deviceMac]}>
                   {device.id}
@@ -101,7 +99,7 @@ const ScanDeviceScreen: FC<ScanDeviceScreenProps> = (
             {loading ? (
               <CustomButton
                 style={styles.button}
-                label={'Dừng lại'}
+                label={translate('stop')}
                 styleLabel={styles.label}
                 onPress={handleStopScan}
               />
@@ -192,10 +190,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
-    height: '15%',
+    height: '10%',
   },
   body: {
-    height: '75%',
+    height: '80%',
   },
   header: {
     height: '10%',

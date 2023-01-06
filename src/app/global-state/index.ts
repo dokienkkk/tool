@@ -3,7 +3,7 @@ import type {StateTuple} from 'reactn/types/use-global';
 import type {Project} from '../../types/project';
 import type {STATUS} from '../../types/status';
 import {initialize} from './initialize';
-import type {BleManager, Device} from 'react-native-ble-plx';
+import type {BleManager, Device, Characteristic} from 'react-native-ble-plx';
 
 export class GlobalState {
   public readonly initialize = initialize;
@@ -88,6 +88,27 @@ export class GlobalState {
   public async setBleManager(status: STATUS) {
     await React.setGlobal<GlobalState>({
       bluetoothStatus: status,
+    });
+  }
+
+  /**
+   * Charactiric
+   *
+   *@type {Characteristic[]}
+   */
+
+  public get characteristics(): Characteristic[] {
+    return React.getGlobal<GlobalState>().characteristics;
+  }
+
+  public useCharacteristics(): StateTuple<GlobalState, 'characteristics'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'characteristics'>('characteristics');
+  }
+
+  public async setCharacteristics(characteristics: Characteristic[]) {
+    await React.setGlobal<GlobalState>({
+      characteristics,
     });
   }
 }

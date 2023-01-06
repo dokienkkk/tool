@@ -1,3 +1,4 @@
+declare const Buffer;
 import {
   View,
   Text,
@@ -11,18 +12,37 @@ import LineBlock from 'src/components/LineBlock/LineBlock';
 import shareStyles from 'src/styles';
 import Colors from 'src/styles/Colors';
 import CustomButton from 'src/components/CustomButton/CustomButton';
-import {showWarning} from 'src/helpers/toast-helper';
-import {UNIVERSE_ADDRESS} from 'src/config/set-address';
+import {showError, showSuccess, showWarning} from 'src/helpers/toast-helper';
+import {
+  SERVICES_UUID_READ_WRITE,
+  TIME_OUT,
+  UNIVERSE_ADDRESS,
+} from 'src/config/set-address';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Devices} from 'src/config/device';
 import type {Device} from 'src/types/device';
+import {globalState} from 'src/app/global-state';
+import base64 from 'react-native-base64';
+import {useBoolean} from 'src/hooks/use-boolean';
+import InfoModal from 'src/components/InfoModal/InfoModal';
+import BluetoothSearchIcon from 'src/icons/BluetoothSearch';
+import type {BleError} from 'react-native-ble-plx';
+import {STATUS} from 'src/types/status';
+import {blueToothService} from 'src/services/bluetooth-service';
+import {convertAddress, convertResponse} from 'src/helpers/string-helper';
 
 interface SetAddressProps {}
 
 const SetAddress: FC<SetAddressProps> = () => {
-  const [address, setAddress] = React.useState('1');
+  const [connectedDevice] = globalState.useConnectedDevice();
 
-  const [deviceSelect, setDeviceSelect] = React.useState(0);
+  const [address, setAddress] = React.useState('01');
+
+  const [order, setOrder] = React.useState('01');
+
+  const [typeDevice, setTypeDevice] = React.useState(0);
+
+  const [isVisible, , openModal, closeModal] = useBoolean(false);
 
   const changeAddress = React.useCallback(
     (type: 'increase' | 'decrease') => {
@@ -50,6 +70,87 @@ const SetAddress: FC<SetAddressProps> = () => {
     [address],
   );
 
+  const handleSetAddress = React.useCallback(async () => {
+    if (isNaN(Number(address))) {
+      showWarning('Giá trị địa chỉ phải là số');
+      return;
+    }
+    if (Number(address) > UNIVERSE_ADDRESS.MAX) {
+      showWarning(`Có tối đa ${UNIVERSE_ADDRESS.MAX} địa chỉ`);
+      return;
+    }
+    if (Number(address) === UNIVERSE_ADDRESS.MIN) {
+      showWarning(`Địa chỉ cần lớn hơn ${UNIVERSE_ADDRESS.MIN}`);
+    }
+    openModal();
+    const timeOut = setTimeout(() => {
+      closeModal();
+    }, TIME_OUT);
+    const params = convertAddress(Number(address));
+
+    const hexString = params.reduce(
+      (result, hexValue) => result + String.fromCharCode(hexValue),
+      '',
+    );
+
+    const connect =
+      await connectedDevice.discoverAllServicesAndCharacteristics();
+    const services = await connect.services();
+    const mainServices = services.find(
+      service => service.uuid === SERVICES_UUID_READ_WRITE,
+    );
+    const characteristics = await mainServices.characteristics();
+    const writeable = characteristics.find(
+      characteristic => characteristic.isWritableWithoutResponse === true,
+    );
+    const readable = characteristics.find(
+      characteristic => characteristic.isReadable === true,
+    );
+
+    const subscrible = readable?.monitor(async (error: BleError, response) => {
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.log('Errỏ when subscrible: ', error.errorCode);
+      }
+      if (response) {
+        const dataInBase64 = response.value;
+        const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
+        clearTimeout(timeOut);
+        closeModal();
+        if (
+          convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
+          Number(address)
+        ) {
+          showSuccess('Set địa chỉ thành công');
+        } else {
+          showError('Set địa chỉ thất bại');
+        }
+        subscrible.remove();
+      }
+    });
+
+    const message = base64.encode(hexString);
+    try {
+      await writeable.writeWithoutResponse(message).then(() => {});
+    } catch (error) {
+      closeModal();
+      blueToothService.handleBleError(error);
+    }
+  }, [address, closeModal, connectedDevice, openModal]);
+
+  React.useEffect(() => {
+    const subscribe = connectedDevice?.onDisconnected(
+      async (error: BleError, device) => {
+        if (device && device.id === connectedDevice?.id) {
+          await globalState.setBluetoothStatus(STATUS.DISCONNECTED);
+        }
+      },
+    );
+    return function cleanup() {
+      subscribe?.remove();
+    };
+  }, [connectedDevice]);
+
   return (
     <View style={styles.container}>
       <View style={styles.flexGrow}>
@@ -64,9 +165,9 @@ const SetAddress: FC<SetAddressProps> = () => {
             data={Devices}
             labelField="name"
             valueField="type"
-            value={deviceSelect}
+            value={typeDevice}
             onChange={(item: Device) => {
-              setDeviceSelect(item.type);
+              setTypeDevice(item.type);
             }}
             maxHeight={300}
             renderLeftIcon={() => (
@@ -89,7 +190,8 @@ const SetAddress: FC<SetAddressProps> = () => {
               <TextInput
                 keyboardType="numeric"
                 placeholder="Nhập STT"
-                value="01"
+                value={order}
+                onChangeText={setOrder}
                 maxLength={4}
                 multiline={false}
                 style={[
@@ -141,8 +243,15 @@ const SetAddress: FC<SetAddressProps> = () => {
           label="Set"
           style={styles.button}
           styleLabel={[shareStyles.textBold, styles.label]}
+          onPress={handleSetAddress}
         />
       </View>
+
+      <InfoModal
+        isVisible={isVisible}
+        body={'Đang set địa chỉ...'}
+        icon={<BluetoothSearchIcon />}
+      />
     </View>
   );
 };

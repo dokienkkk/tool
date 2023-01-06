@@ -42,5 +42,6 @@
     "quantity" : "Số lượng",
     "search" : "Tìm kiếm",
     "goBack" : "Quay lại",
-    "scan" :  "Quét thiết bị"
+    "scan" :  "Quét thiết bị",
+    "stop" : "Dừng lại"
 }

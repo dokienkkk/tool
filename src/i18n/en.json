@@ -42,5 +42,6 @@
     "quantity" : "Quantity",
     "search" : "Search",
     "goBack" : "Go Back",
-    "scan" :  "Scan Device"
+    "scan" :  "Scan Device",
+    "stop" : "Stop"
 }

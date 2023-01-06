@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import type {Reducer} from 'react';
 import React from 'react';
 import type {BleError, Device} from 'react-native-ble-plx';
+import {ScanMode} from 'react-native-ble-plx';
 import {globalState} from 'src/app/global-state';
 import {RD_NAME_BLUETOOTH} from 'src/config/name';
 import {showError, showSuccess} from 'src/helpers/toast-helper';
@@ -9,8 +10,12 @@ import {useBoolean} from 'src/hooks/use-boolean';
 import type {ScanDeviceListReducerAction} from 'src/reducer/scan-device-reducer';
 import {ScanDeviceListReducerActionType} from 'src/reducer/scan-device-reducer';
 import {scanDeviceReducer} from 'src/reducer/scan-device-reducer';
+import {STATUS} from 'src/types/status';
+import type {BluetoothSevice} from '.';
 
-export function useBluetoothScan(): [
+export function useBluetoothScan(
+  this: BluetoothSevice,
+): [
   Device[],
   boolean,
   () => void,
@@ -37,13 +42,14 @@ export function useBluetoothScan(): [
     setLoading(true);
     bleManager.startDeviceScan(
       null,
-      null,
+      {
+        scanMode: ScanMode.LowLatency,
+      },
       async (error: BleError, newDevice: Device) => {
         if (error) {
-          // eslint-disable-next-line no-console
-          console.log('Error when scan new device');
-          // eslint-disable-next-line no-console
-          console.log(error);
+          bleManager.stopDeviceScan();
+          setLoading(false);
+          this.handleBleError(error);
         }
         if (
           newDevice &&
@@ -71,17 +77,15 @@ export function useBluetoothScan(): [
       setTitle(titleModal);
       openModal();
       try {
-        const deviceConnected = await bleManager.connectToDevice(device.id);
-        if (deviceConnected) {
-          await globalState.setConnectedDevice(device);
-          showSuccess(`Đã kết nối với thiết bị ${deviceName}`);
-          navigation.goBack();
-        }
+        await bleManager
+          .connectToDevice(device.id)
+          .then(async (connectedDevice: Device) => {
+            await globalState.setConnectedDevice(connectedDevice);
+            await globalState.setBluetoothStatus(STATUS.CONNECTED);
+            showSuccess('Đã kết nối với bộ set địa chỉ');
+            navigation.goBack();
+          });
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('Error when connect to device');
-        // eslint-disable-next-line no-console
-        console.log(error);
         showError(`Không thể kết nối với thiết bị ${deviceName}`);
       }
       closeModal();

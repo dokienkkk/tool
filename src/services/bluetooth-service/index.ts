@@ -2,6 +2,7 @@ import type {BleError, Device} from 'react-native-ble-plx';
 import {BleManager} from 'react-native-ble-plx';
 import {Subject} from 'rxjs';
 import {useBluetoothScan} from './bluetooth-scan';
+import {handleBleError} from './handle-ble-error';
 
 export class BluetoothSevice {
   private bleManager: BleManager;
@@ -45,6 +46,8 @@ export class BluetoothSevice {
   };
 
   public readonly useBluetoothScan = useBluetoothScan;
+
+  public readonly handleBleError = handleBleError;
 }
 
 export const blueToothService = new BluetoothSevice();
