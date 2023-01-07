@@ -13,7 +13,9 @@ export const formatNumber = (num: string): string => {
   return Number(num) < 10 ? '0' + num : num;
 };
 
-export const convertAddress = (num: number): [number, number, number] => {
+export const convertAddressToArray = (
+  num: number,
+): [number, number, number] => {
   if (num > UNIVERSE_ADDRESS.MAX) {
     throw new Error('Invalid number: Có tối đa 512 địa chỉ');
   }

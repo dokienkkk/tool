@@ -2,7 +2,7 @@ import type {BleError} from 'react-native-ble-plx';
 import {BleErrorCode} from 'react-native-ble-plx';
 import {showError, showWarning} from 'src/helpers/toast-helper';
 
-export function handleBleError(error: BleError) {
+export function handleBleError(error: BleError, title = 'Lỗi') {
   switch (error.errorCode) {
     case BleErrorCode.BluetoothPoweredOff:
       showWarning('Bạn cần bật Bluetooth để sử dụng chức năng này');
@@ -14,6 +14,6 @@ export function handleBleError(error: BleError) {
       showError('Mất kết nối với thiết bị');
       return;
     default:
-      showError('Lỗi');
+      showError(title);
   }
 }

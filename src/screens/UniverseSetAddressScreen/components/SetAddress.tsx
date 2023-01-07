@@ -1,4 +1,3 @@
-declare const Buffer;
 import {
   View,
   Text,
@@ -6,48 +5,31 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import type {FC, MutableRefObject} from 'react';
+import type {FC} from 'react';
 import React from 'react';
 import LineBlock from 'src/components/LineBlock/LineBlock';
 import shareStyles from 'src/styles';
 import Colors from 'src/styles/Colors';
 import CustomButton from 'src/components/CustomButton/CustomButton';
-import {showError, showSuccess, showWarning} from 'src/helpers/toast-helper';
-import {
-  SERVICES_UUID_READ_WRITE,
-  TIME_OUT,
-  UNIVERSE_ADDRESS,
-} from 'src/config/set-address';
+import {showWarning} from 'src/helpers/toast-helper';
+import {UNIVERSE_ADDRESS} from 'src/config/set-address';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Devices} from 'src/config/device';
 import type {Device} from 'src/types/device';
-import {globalState} from 'src/app/global-state';
-import base64 from 'react-native-base64';
-import {useBoolean} from 'src/hooks/use-boolean';
 import InfoModal from 'src/components/InfoModal/InfoModal';
 import BluetoothSearchIcon from 'src/icons/BluetoothSearch';
-import type {BleError, Subscription} from 'react-native-ble-plx';
-import {STATUS} from 'src/types/status';
 import {blueToothService} from 'src/services/bluetooth-service';
-import {convertAddress, convertResponse} from 'src/helpers/string-helper';
-import {addressService} from 'src/services/address-service';
 
 interface SetAddressProps {}
 
 const SetAddress: FC<SetAddressProps> = () => {
-  const [connectedDevice] = globalState.useConnectedDevice();
-
-  const [universe] = globalState.useUniverse();
-
-  const [, createNewAddress] = addressService.useAddress(universe);
-
   const [address, setAddress] = React.useState('01');
 
   const [order, setOrder] = React.useState('01');
 
   const [typeDevice, setTypeDevice] = React.useState(0);
 
-  const [isVisible, , openModal, closeModal] = useBoolean(false);
+  const [loading, handleSendAddress] = blueToothService.useBluetoothControl();
 
   const changeAddress = React.useCallback(
     (type: 'increase' | 'decrease') => {
@@ -59,130 +41,29 @@ const SetAddress: FC<SetAddressProps> = () => {
 
       if (type === 'increase') {
         numAddress++;
+
         if (numAddress > UNIVERSE_ADDRESS.MAX) {
           showWarning(`Có tối đa ${UNIVERSE_ADDRESS.MAX} địa chỉ`);
           return;
         }
+
         setAddress(numAddress.toString());
       } else if (type === 'decrease') {
         numAddress--;
+
         if (numAddress === UNIVERSE_ADDRESS.MIN) {
           return;
         }
+
         setAddress(numAddress.toString());
       }
     },
-    [address],
+    [address, setAddress],
   );
 
-  const subscriptionRef: MutableRefObject<Subscription> =
-    React.useRef<Subscription>();
-
-  const handleSetAddress = React.useCallback(async () => {
-    subscriptionRef.current?.remove();
-
-    if (isNaN(Number(address)) || isNaN(Number(order))) {
-      showWarning('Giá trị nhập vào phải là số');
-      return;
-    }
-    if (Number(address) > UNIVERSE_ADDRESS.MAX) {
-      showWarning(`Có tối đa ${UNIVERSE_ADDRESS.MAX} địa chỉ`);
-      return;
-    }
-    if (Number(address) === UNIVERSE_ADDRESS.MIN) {
-      showWarning(`Địa chỉ cần lớn hơn ${UNIVERSE_ADDRESS.MIN}`);
-    }
-
-    if (!connectedDevice) {
-      showWarning('Bạn chưa kết nối với thiết bị');
-      return;
-    }
-    openModal();
-    const timeOut = setTimeout(() => {
-      closeModal();
-    }, TIME_OUT);
-    const params = convertAddress(Number(address));
-
-    const hexString = params.reduce(
-      (result, hexValue) => result + String.fromCharCode(hexValue),
-      '',
-    );
-
-    const connect =
-      await connectedDevice.discoverAllServicesAndCharacteristics();
-    const services = await connect.services();
-    const mainServices = services.find(
-      service => service.uuid === SERVICES_UUID_READ_WRITE,
-    );
-    const characteristics = await mainServices.characteristics();
-    const writeable = characteristics.find(
-      characteristic => characteristic.isWritableWithoutResponse === true,
-    );
-    const readable = characteristics.find(
-      characteristic => characteristic.isReadable === true,
-    );
-
-    subscriptionRef.current = readable?.monitor(
-      async (error: BleError, response) => {
-        if (error) {
-          // eslint-disable-next-line no-console
-          console.log(error);
-        }
-        if (response) {
-          const dataInBase64 = response.value;
-          const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
-          clearTimeout(timeOut);
-          closeModal();
-          if (
-            convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
-            Number(address)
-          ) {
-            await createNewAddress({
-              order: Number(order),
-              deviceType: typeDevice,
-              addressId: Number(address),
-              universeId: universe.id,
-            }).then(() => {
-              setOrder((Number(order) + 1).toString());
-              showSuccess('Set địa chỉ thành công');
-            });
-          } else {
-            showError('Set địa chỉ thất bại');
-          }
-        }
-      },
-    );
-
-    const message = base64.encode(hexString);
-    try {
-      await writeable.writeWithoutResponse(message).then(() => {});
-    } catch (error) {
-      closeModal();
-      blueToothService.handleBleError(error);
-    }
-  }, [
-    address,
-    closeModal,
-    connectedDevice,
-    createNewAddress,
-    openModal,
-    order,
-    typeDevice,
-    universe,
-  ]);
-
-  React.useEffect(() => {
-    const subscribe = connectedDevice?.onDisconnected(
-      async (error: BleError, device) => {
-        if (device && device.id === connectedDevice?.id) {
-          await globalState.setBluetoothStatus(STATUS.DISCONNECTED);
-        }
-      },
-    );
-    return function cleanup() {
-      subscribe?.remove();
-    };
-  }, [connectedDevice]);
+  const handleSetAddress = React.useCallback(() => {
+    handleSendAddress(address, order, typeDevice);
+  }, [address, handleSendAddress, order, typeDevice]);
 
   return (
     <View style={styles.container}>
@@ -281,7 +162,7 @@ const SetAddress: FC<SetAddressProps> = () => {
       </View>
 
       <InfoModal
-        isVisible={isVisible}
+        isVisible={loading}
         body={'Đang set địa chỉ...'}
         icon={<BluetoothSearchIcon />}
       />
