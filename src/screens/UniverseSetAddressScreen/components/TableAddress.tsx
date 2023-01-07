@@ -4,6 +4,10 @@ import React from 'react';
 import shareStyles from 'src/styles';
 import DeleteIcon from 'src/icons/DeleteIcon';
 import Colors from 'src/styles/Colors';
+import {addressService} from 'src/services/address-service';
+import {globalState} from 'src/app/global-state';
+import type {Address} from 'src/database/model';
+import {renderNameDevice} from 'src/config/device';
 
 export const TABLE_CONFIG = [
   {
@@ -26,11 +30,13 @@ export const TABLE_CONFIG = [
 
 interface TableAddressProps {}
 
-const mockData = [1, 1, 1, 1, 1, 11, 1, 1, 1, 1, 1, 1, 1, 1];
-
 const TableAddress: FC<TableAddressProps> = () => {
+  const [currentUniverse] = globalState.useUniverse();
+
+  const [listAddress] = addressService.useAddress(currentUniverse);
+
   const renderItem = React.useCallback(
-    () => (
+    ({item}: {item: Partial<Address>}) => (
       <>
         <View style={[styles.tRow, styles.bgWhite, styles.borderBottom]}>
           <Text
@@ -39,7 +45,7 @@ const TableAddress: FC<TableAddressProps> = () => {
               styles.tData,
               {width: TABLE_CONFIG[0].width},
             ]}>
-            01
+            {item.order}
           </Text>
           <Text
             style={[
@@ -47,7 +53,7 @@ const TableAddress: FC<TableAddressProps> = () => {
               styles.tData,
               {width: TABLE_CONFIG[1].width},
             ]}>
-            01
+            {item.addressId}
           </Text>
           <Text
             style={[
@@ -55,7 +61,7 @@ const TableAddress: FC<TableAddressProps> = () => {
               styles.tData,
               {width: TABLE_CONFIG[2].width},
             ]}>
-            Đèn RGB
+            {renderNameDevice(item.deviceType)}
           </Text>
           <Text
             style={[
@@ -70,12 +76,6 @@ const TableAddress: FC<TableAddressProps> = () => {
             </TouchableOpacity>
           </Text>
         </View>
-        {/* <Dash
-          dashThickness={0.5}
-          dashGap={1}
-          dashLength={3}
-          dashColor={Colors.blue}
-        /> */}
       </>
     ),
     [],
@@ -92,8 +92,9 @@ const TableAddress: FC<TableAddressProps> = () => {
         ))}
       </View>
       <FlatList
-        data={mockData}
+        data={listAddress}
         renderItem={renderItem}
+        extraData={listAddress}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       />

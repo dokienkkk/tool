@@ -82,7 +82,7 @@ export function useBluetoothScan(
           .then(async (connectedDevice: Device) => {
             await globalState.setConnectedDevice(connectedDevice);
             await globalState.setBluetoothStatus(STATUS.CONNECTED);
-            showSuccess('Đã kết nối với bộ set địa chỉ');
+            showSuccess(`Đã kết nối với thiết bị ${deviceName}`);
             navigation.goBack();
           });
       } catch (error) {

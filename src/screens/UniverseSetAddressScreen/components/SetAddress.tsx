@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import type {FC} from 'react';
+import type {FC, MutableRefObject} from 'react';
 import React from 'react';
 import LineBlock from 'src/components/LineBlock/LineBlock';
 import shareStyles from 'src/styles';
@@ -26,15 +26,20 @@ import base64 from 'react-native-base64';
 import {useBoolean} from 'src/hooks/use-boolean';
 import InfoModal from 'src/components/InfoModal/InfoModal';
 import BluetoothSearchIcon from 'src/icons/BluetoothSearch';
-import type {BleError} from 'react-native-ble-plx';
+import type {BleError, Subscription} from 'react-native-ble-plx';
 import {STATUS} from 'src/types/status';
 import {blueToothService} from 'src/services/bluetooth-service';
 import {convertAddress, convertResponse} from 'src/helpers/string-helper';
+import {addressService} from 'src/services/address-service';
 
 interface SetAddressProps {}
 
 const SetAddress: FC<SetAddressProps> = () => {
   const [connectedDevice] = globalState.useConnectedDevice();
+
+  const [universe] = globalState.useUniverse();
+
+  const [, createNewAddress] = addressService.useAddress(universe);
 
   const [address, setAddress] = React.useState('01');
 
@@ -70,9 +75,14 @@ const SetAddress: FC<SetAddressProps> = () => {
     [address],
   );
 
+  const subscriptionRef: MutableRefObject<Subscription> =
+    React.useRef<Subscription>();
+
   const handleSetAddress = React.useCallback(async () => {
-    if (isNaN(Number(address))) {
-      showWarning('Giá trị địa chỉ phải là số');
+    subscriptionRef.current?.remove();
+
+    if (isNaN(Number(address)) || isNaN(Number(order))) {
+      showWarning('Giá trị nhập vào phải là số');
       return;
     }
     if (Number(address) > UNIVERSE_ADDRESS.MAX) {
@@ -81,6 +91,11 @@ const SetAddress: FC<SetAddressProps> = () => {
     }
     if (Number(address) === UNIVERSE_ADDRESS.MIN) {
       showWarning(`Địa chỉ cần lớn hơn ${UNIVERSE_ADDRESS.MIN}`);
+    }
+
+    if (!connectedDevice) {
+      showWarning('Bạn chưa kết nối với thiết bị');
+      return;
     }
     openModal();
     const timeOut = setTimeout(() => {
@@ -107,27 +122,36 @@ const SetAddress: FC<SetAddressProps> = () => {
       characteristic => characteristic.isReadable === true,
     );
 
-    const subscrible = readable?.monitor(async (error: BleError, response) => {
-      if (error) {
-        // eslint-disable-next-line no-console
-        console.log('Errỏ when subscrible: ', error.errorCode);
-      }
-      if (response) {
-        const dataInBase64 = response.value;
-        const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
-        clearTimeout(timeOut);
-        closeModal();
-        if (
-          convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
-          Number(address)
-        ) {
-          showSuccess('Set địa chỉ thành công');
-        } else {
-          showError('Set địa chỉ thất bại');
+    subscriptionRef.current = readable?.monitor(
+      async (error: BleError, response) => {
+        if (error) {
+          // eslint-disable-next-line no-console
+          console.log(error);
         }
-        subscrible.remove();
-      }
-    });
+        if (response) {
+          const dataInBase64 = response.value;
+          const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
+          clearTimeout(timeOut);
+          closeModal();
+          if (
+            convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
+            Number(address)
+          ) {
+            await createNewAddress({
+              order: Number(order),
+              deviceType: typeDevice,
+              addressId: Number(address),
+              universeId: universe.id,
+            }).then(() => {
+              setOrder((Number(order) + 1).toString());
+              showSuccess('Set địa chỉ thành công');
+            });
+          } else {
+            showError('Set địa chỉ thất bại');
+          }
+        }
+      },
+    );
 
     const message = base64.encode(hexString);
     try {
@@ -136,7 +160,16 @@ const SetAddress: FC<SetAddressProps> = () => {
       closeModal();
       blueToothService.handleBleError(error);
     }
-  }, [address, closeModal, connectedDevice, openModal]);
+  }, [
+    address,
+    closeModal,
+    connectedDevice,
+    createNewAddress,
+    openModal,
+    order,
+    typeDevice,
+    universe,
+  ]);
 
   React.useEffect(() => {
     const subscribe = connectedDevice?.onDisconnected(

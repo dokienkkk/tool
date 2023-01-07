@@ -13,6 +13,10 @@ interface InfoModalProps {
   icon?: ReactElement;
 
   body?: string;
+
+  button?: string;
+
+  onPress?: () => void;
 }
 
 const InfoModal: FC<PropsWithChildren<InfoModalProps>> = (

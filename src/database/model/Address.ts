@@ -5,6 +5,12 @@ export class Address {
   @PrimaryColumn('uuid', {name: 'id'})
   id: string;
 
+  @Column('text', {name: 'universeId'})
+  universeId: string;
+
+  @Column('integer', {name: 'addressId'})
+  addressId: number;
+
   @Column('integer', {name: 'order'})
   order: number;
 

@@ -4,6 +4,7 @@ import type {Project} from '../../types/project';
 import type {STATUS} from '../../types/status';
 import {initialize} from './initialize';
 import type {BleManager, Device, Characteristic} from 'react-native-ble-plx';
+import type {Address, Universe} from 'src/database/model';
 
 export class GlobalState {
   public readonly initialize = initialize;
@@ -110,6 +111,46 @@ export class GlobalState {
     await React.setGlobal<GlobalState>({
       characteristics,
     });
+  }
+
+  /**
+   * Universe
+   *
+   *@type {Universe}
+   */
+  public get universe(): Universe {
+    return React.getGlobal<GlobalState>().universe;
+  }
+
+  public async setUniverse(universe: Universe) {
+    await React.setGlobal<GlobalState>({
+      universe,
+    });
+  }
+
+  public useUniverse(): StateTuple<GlobalState, 'universe'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'universe'>('universe');
+  }
+
+  /**
+   * Universe
+   *
+   *@type {Universe}
+   */
+  public get address(): Address[] {
+    return React.getGlobal<GlobalState>().address;
+  }
+
+  public async setAddress(address: Address[]) {
+    await React.setGlobal<GlobalState>({
+      address,
+    });
+  }
+
+  public useAddress(): StateTuple<GlobalState, 'address'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'address'>('address');
   }
 }
 

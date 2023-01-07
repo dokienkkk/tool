@@ -17,6 +17,7 @@ import {universeService} from '../../services/universe-service';
 import type {Universe} from '../../database/model';
 import {WheelPicker} from 'react-native-wheel-picker-android';
 import {quantityUniverse} from '../../config/universe';
+import {globalState} from 'src/app/global-state';
 
 const dataQuantity = [
   ...Array.from({length: quantityUniverse}, (_, i) => (i + 1).toString()),
@@ -53,13 +54,15 @@ const ProjectDetailScreen: FC<ProjectDetailScreenProps> = (
     handleCreateUniverses,
   ] = universeService.useUniverseList(project);
 
-  const handleGoToUniverseSetAddressScreen = React.useCallback(() => {
-    navigation.navigate(UniverseSetAddressScreen.name, {
-      universe: {
-        name: 'Universe 1',
-      },
-    });
-  }, [navigation]);
+  const handleGoToUniverseSetAddressScreen = React.useCallback(
+    async (universe: Universe) => {
+      await globalState.setUniverse(universe);
+      navigation.navigate(UniverseSetAddressScreen.name, {
+        universe,
+      });
+    },
+    [navigation],
+  );
 
   const handleCreateNewUniverses = React.useCallback(async () => {
     await handleCreateUniverses(Number(dataQuantity[index]));
@@ -79,7 +82,9 @@ const ProjectDetailScreen: FC<ProjectDetailScreenProps> = (
           left={<UniverseIcon color={Colors.blue} />}
           label={item.name}
           style={shareStyles.boxShadow}
-          onPress={handleGoToUniverseSetAddressScreen}
+          onPress={() => {
+            handleGoToUniverseSetAddressScreen(item);
+          }}
         />
       </View>
     ),
