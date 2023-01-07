@@ -130,6 +130,7 @@ export function useBluetoothControl(): [
 
       const timeOut = setTimeout(() => {
         setLoading(false);
+        // showError('Set địa chỉ thất bại');
       }, TIME_OUT);
 
       const params = convertAddressToArray(Number(address));
@@ -178,6 +179,7 @@ export function useBluetoothControl(): [
                 // eslint-disable-next-line no-console
                 console.log('Error when create address into DB: ', err);
               });
+            // subscriptionRef.current?.remove();
           } else {
             showError('Set địa chỉ thất bại');
           }
@@ -187,12 +189,13 @@ export function useBluetoothControl(): [
       const message = base64.encode(hexString);
 
       try {
-        await writable.writeWithoutResponse(message).then(() => {});
+        await writable?.writeWithoutResponse(message).then(() => {});
       } catch (error) {
         setLoading(false);
 
         blueToothService.handleBleError(error);
       }
+      subscriptionRef.current?.remove();
     },
     [checkConditionInput, createNewAddress, readable, universe, writable],
   );

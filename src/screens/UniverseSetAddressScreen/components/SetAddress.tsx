@@ -61,8 +61,8 @@ const SetAddress: FC<SetAddressProps> = () => {
     [address, setAddress],
   );
 
-  const handleSetAddress = React.useCallback(() => {
-    handleSendAddress(address, order, typeDevice);
+  const handleSetAddress = React.useCallback(async () => {
+    await handleSendAddress(address, order, typeDevice);
   }, [address, handleSendAddress, order, typeDevice]);
 
   return (

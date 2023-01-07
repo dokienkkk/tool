@@ -19,12 +19,15 @@ import KeepAwake from '@sayem314/react-native-keep-awake';
 import SetAddress from 'src/screens/UniverseSetAddressScreen/components/SetAddress';
 import TableAddress from './components/TableAddress';
 import BluetoothOff from 'src/icons/BluetoothOff';
+import DeviceInfo from './components/DeviceInfo';
+import InfoIcon from 'src/icons/InfoIcon';
 
 interface UniverseSetAddressScreenProps extends NativeStackScreenProps<any> {}
 
 const renderScene = SceneMap({
-  first: TableAddress,
-  second: SetAddress,
+  first: DeviceInfo,
+  second: TableAddress,
+  third: SetAddress,
 });
 
 const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
@@ -45,6 +48,7 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
   const [routes] = React.useState([
     {key: TABBAR.ROUTE_FIRST.KEY, title: TABBAR.ROUTE_FIRST.TITLE},
     {key: TABBAR.ROUTE_SECOND.KEY, title: TABBAR.ROUTE_SECOND.TITLE},
+    {key: TABBAR.ROUTE_THIRD.KEY, title: TABBAR.ROUTE_THIRD.TITLE},
   ]);
 
   const renderTabBar = React.useCallback(() => {
@@ -60,6 +64,8 @@ const UniverseSetAddressScreen: FC<UniverseSetAddressScreenProps> = (
               }}
               icon={
                 tabIndex === TABBAR.ROUTE_FIRST.INDEX ? (
+                  <InfoIcon focus={focus} />
+                ) : tabIndex === TABBAR.ROUTE_SECOND.INDEX ? (
                   <TabInfoIcon focus={focus} />
                 ) : (
                   <TabSetAddressIcon focus={focus} />
