@@ -17,6 +17,7 @@ import {setJSExceptionHandler} from 'react-native-exception-handler';
 import {globalState} from './src/app/global-state';
 import {databaseService} from './src/database/services/database-service';
 import {AppState} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
 setJSExceptionHandler((error, isFatal) => {
   // eslint-disable-next-line no-console
@@ -54,7 +55,7 @@ const App: LazyExoticComponent<any> = React.lazy(async () => {
 
 const AppEntry: FC = () => {
   React.useEffect(() => {
-    //SplashScreen.hide();
+    SplashScreen.hide();
   }, []);
   return (
     <Suspense fallback={null}>
