@@ -21,6 +21,7 @@
     "action.confirm" : "Xác nhận",
     "action.ok" : "OK",
     "action.add" : "Thêm",
+    "action.continue" : "Tiếp tục",
     "action.delete.confirm" : "Bạn có chắc không ?",
     "action.delete.project" : "Xóa dự án sẽ xóa toàn bộ tất cả các thông tin liên quan đến dự án",
     "action.delete" : "Xóa",

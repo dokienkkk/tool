@@ -63,7 +63,7 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
     [handleGoToProjectDetailScreen],
   );
 
-  bluetoothPermissionSevice.checkPermission();
+  bluetoothPermissionSevice.usePermission();
 
   return (
     <DefaultLayout

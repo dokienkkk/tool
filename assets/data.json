@@ -1,0 +1,35 @@
+{
+  "project": "Dự án ma",
+  "universe": [
+    {
+      "idUniverse": "1",
+      "data": [
+        {
+          "STT": "1",
+          "address": "1",
+          "typeDevice": "0"
+        },
+        {
+          "STT": "2",
+          "address": "3",
+          "typeDevice": "1"
+        }
+      ]
+    },
+    {
+      "idUniverse": "2",
+      "data": [
+        {
+          "STT": "1",
+          "address": "10",
+          "typeDevice": "0"
+        },
+        {
+          "STT": "2",
+          "address": "13",
+          "typeDevice": "1"
+        }
+      ]
+    }
+  ]
+}

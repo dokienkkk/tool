@@ -4,6 +4,7 @@ import React from 'react';
 import Modal from 'react-native-modal';
 import Colors from 'src/styles/Colors';
 import shareStyles from 'src/styles';
+import CustomButton from '../CustomButton/CustomButton';
 
 interface InfoModalProps {
   isVisible: boolean;
@@ -22,7 +23,7 @@ interface InfoModalProps {
 const InfoModal: FC<PropsWithChildren<InfoModalProps>> = (
   props: InfoModalProps,
 ) => {
-  const {isVisible, onBackdropPress, icon, body} = props;
+  const {isVisible, onBackdropPress, icon, body, button, onPress} = props;
   return (
     <Modal
       isVisible={isVisible}
@@ -35,6 +36,14 @@ const InfoModal: FC<PropsWithChildren<InfoModalProps>> = (
           <View style={styles.body}>
             <Text style={[shareStyles.textRegular, styles.text]}>{body}</Text>
           </View>
+          {button && (
+            <CustomButton
+              onPress={onPress}
+              label={button}
+              style={styles.button}
+              styleLabel={styles.label}
+            />
+          )}
         </View>
       </View>
     </Modal>
@@ -54,15 +63,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     overflow: 'hidden',
-    height: 200,
-    paddingVertical: 40,
+    minHeight: 200,
+    paddingVertical: 20,
   },
   icon: {},
-  body: {},
+  body: {
+    marginBottom: 16,
+  },
   text: {
     fontSize: 16,
     color: Colors.blue,
     textAlign: 'center',
+  },
+  button: {
+    backgroundColor: Colors.blue,
+    borderRadius: 20,
+    width: '40%',
+    height: 42,
+  },
+  label: {
+    color: Colors.white,
+    fontSize: 16,
+    lineHeight: 16,
   },
 });
 

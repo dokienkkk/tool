@@ -21,6 +21,7 @@
     "action.confirm" : "Confirm",
     "action.ok" : "OK",
     "action.add" : "Add",
+    "action.continue" : "Continue",
     "action.delete.confirm" : "Are you sure ?",
     "action.delete.project" : "Deleting the project will delete all information related to the project",
     "action.delete" : "Delete",
