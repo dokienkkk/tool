@@ -43,7 +43,7 @@ const SettingProjectDetailScreen: FC<SettingProjectDetailScreenProps> = (
 
   const handleExportFile = React.useCallback(async () => {
     const status = await exportPermissionSevice.checkPermission();
-    if (status === 'denied') {
+    if (status === 'blocked') {
       showWarning(
         'Vui lòng cấp quyền cho ứng dụng truy cập bộ nhớ để sử dụng chức năng này',
       );
