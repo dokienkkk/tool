@@ -12,6 +12,7 @@ import {ScanDeviceListReducerActionType} from 'src/reducer/scan-device-reducer';
 import {scanDeviceReducer} from 'src/reducer/scan-device-reducer';
 import {STATUS} from 'src/types/status';
 import type {BluetoothSevice} from '.';
+import {bluetoothPermissionSevice} from '../bluetooth-permission-service';
 
 export function useBluetoothScan(
   this: BluetoothSevice,
@@ -39,6 +40,7 @@ export function useBluetoothScan(
   const [isVisible, , openModal, closeModal] = useBoolean(false);
 
   const handleScanDevice = React.useCallback(async () => {
+    bluetoothPermissionSevice.checkPermission();
     setLoading(true);
     bleManager.startDeviceScan(
       null,
