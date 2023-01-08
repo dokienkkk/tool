@@ -17,7 +17,7 @@ import RNFS from 'react-native-fs';
 import {addressRepository} from 'src/repositories/address-repository';
 import InfoModal from 'src/components/InfoModal/InfoModal';
 import SuccessIcon from 'src/icons/SuccessIcon';
-import {showError} from 'src/helpers/toast-helper';
+import {showError, showWarning} from 'src/helpers/toast-helper';
 
 interface SettingProjectDetailScreenProps extends NativeStackScreenProps<any> {}
 
@@ -43,10 +43,13 @@ const SettingProjectDetailScreen: FC<SettingProjectDetailScreenProps> = (
 
   const handleExportFile = React.useCallback(async () => {
     const status = await exportPermissionSevice.checkPermission();
+    if (status === 'denied') {
+      showWarning(
+        'Vui lòng cấp quyền cho ứng dụng truy cập bộ nhớ để sử dụng chức năng này',
+      );
+      return;
+    }
     if (status !== 'granted') {
-      // showWarning(
-      //   'Vui lòng cấp quyền cho ứng dụng truy cập vào bộ nhớ để sử dụng chức năng này',
-      // );
       return;
     }
 
