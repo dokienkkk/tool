@@ -8,6 +8,9 @@ import {addressService} from 'src/services/address-service';
 import {globalState} from 'src/app/global-state';
 import type {Address} from 'src/database/model';
 import {renderNameDevice} from 'src/config/device';
+import CustomModal from 'src/components/CustomModal/CustomModal';
+import {useBoolean} from 'src/hooks/use-boolean';
+import {useTranslation} from 'react-i18next';
 
 export const TABLE_CONFIG = [
   {
@@ -34,6 +37,30 @@ const TableAddress: FC<TableAddressProps> = () => {
   const [currentUniverse] = globalState.useUniverse();
 
   const [listAddress] = addressService.useAddress(currentUniverse);
+
+  const [translate] = useTranslation();
+
+  const [isVisible, , openModal, closeModal] = useBoolean(false);
+
+  const [text, setText] = React.useState('Bạn có chắc muốn xóa không ?');
+
+  const [id, setId] = React.useState('');
+
+  const [, , deleteAddress] = addressService.useAddress(currentUniverse);
+
+  const handleConfirmDelete = React.useCallback(
+    (item: Partial<Address>) => {
+      setId(item.id);
+      setText(`Xóa địa chỉ ${item.addressId} ?`);
+      openModal();
+    },
+    [openModal],
+  );
+
+  const handleDeleteAddress = React.useCallback(async () => {
+    await deleteAddress({id});
+    closeModal();
+  }, [closeModal, deleteAddress, id]);
 
   const renderItem = React.useCallback(
     ({item}: {item: Partial<Address>}) => (
@@ -71,14 +98,14 @@ const TableAddress: FC<TableAddressProps> = () => {
                 width: TABLE_CONFIG[3].width,
               },
             ]}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handleConfirmDelete(item)}>
               <DeleteIcon />
             </TouchableOpacity>
           </Text>
         </View>
       </>
     ),
-    [],
+    [handleConfirmDelete],
   );
   return (
     <View style={styles.flex1}>
@@ -98,6 +125,18 @@ const TableAddress: FC<TableAddressProps> = () => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       />
+      <CustomModal
+        isVisible={isVisible}
+        title={translate('action.confirm')}
+        onBackdropPress={closeModal}
+        labelPrimary={translate('action.delete')}
+        labelSecondary={translate('action.cancel')}
+        onPressSecondary={closeModal}
+        onPressPrimary={handleDeleteAddress}>
+        <View>
+          <Text style={[shareStyles.textBold, styles.textModal]}>{text}</Text>
+        </View>
+      </CustomModal>
     </View>
   );
 };
@@ -139,6 +178,12 @@ const styles = StyleSheet.create({
   borderBottom: {
     borderBottomWidth: 0.5,
     borderColor: Colors.gray,
+  },
+  textModal: {
+    fontSize: 16,
+    color: Colors.black,
+    textAlign: 'center',
+    padding: 12,
   },
 });
 

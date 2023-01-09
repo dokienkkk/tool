@@ -22,7 +22,6 @@ import type {DeviceType} from 'src/types/device';
 import {STATUS} from 'src/types/status';
 import {addressService} from '../address-service';
 import base64 from 'react-native-base64';
-import {blueToothService} from '.';
 
 export function useBluetoothControl(): [
   boolean,
@@ -120,9 +119,17 @@ export function useBluetoothControl(): [
     [connectedDevice],
   );
 
+  const validateAddress = React.useCallback((address: number): boolean => {
+    return true;
+  }, []);
+
   const handleSetAddress = React.useCallback(
     async (address: string, order: string, deviceType: DeviceType) => {
       if (!checkConditionInput(address, order)) {
+        return;
+      }
+
+      if (!validateAddress(Number(address))) {
         return;
       }
 
@@ -130,7 +137,6 @@ export function useBluetoothControl(): [
 
       const timeOut = setTimeout(() => {
         setLoading(false);
-        // showError('Set địa chỉ thất bại');
       }, TIME_OUT);
 
       const params = convertAddressToArray(Number(address));
@@ -142,62 +148,60 @@ export function useBluetoothControl(): [
 
       subscriptionRef.current?.remove();
 
-      subscriptionRef.current = readable?.monitor(
-        async (error: BleError, response) => {
-          if (error) {
-            // eslint-disable-next-line no-console
-            console.log('Error when subscrible response', error);
-          }
+      readable?.monitor(async (error: BleError, response) => {
+        if (error) {
+          // eslint-disable-next-line no-console
+          console.log('Error when subscrible response', error);
+        }
 
-          if (!response) {
-            return;
-          }
+        if (!response) {
+          return;
+        }
 
-          const dataInBase64 = response.value;
+        const dataInBase64 = response.value;
 
-          const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
+        const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
 
-          clearTimeout(timeOut);
+        clearTimeout(timeOut);
 
-          setLoading(false);
+        setLoading(false);
 
-          if (
-            convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
-            Number(address)
-          ) {
-            await createNewAddress({
-              order: Number(order),
-              deviceType: deviceType,
-              addressId: Number(address),
-              universeId: universe.id,
+        if (
+          convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
+          Number(address)
+        ) {
+          await createNewAddress({
+            order: Number(order),
+            deviceType: deviceType,
+            addressId: Number(address),
+            universeId: universe.id,
+          })
+            .then(() => {
+              showSuccess('Set địa chỉ thành công');
+              subscriptionRef.current?.remove();
             })
-              .then(() => {
-                // setOrder((Number(order) + 1).toString());
-                showSuccess('Set địa chỉ thành công');
-              })
-              .catch(err => {
-                // eslint-disable-next-line no-console
-                console.log('Error when create address into DB: ', err);
-              });
-            // subscriptionRef.current?.remove();
-          } else {
-            showError('Set địa chỉ thất bại');
-          }
-        },
-      );
+            .catch(err => {
+              // eslint-disable-next-line no-console
+              console.log('Error when create address into DB: ', err);
+            });
+        } else {
+          showError('Set địa chỉ thất bại');
+          subscriptionRef.current?.remove();
+        }
+      });
 
       const message = base64.encode(hexString);
 
-      try {
-        await writable?.writeWithoutResponse(message).then(() => {});
-      } catch (error) {
-        setLoading(false);
-
-        blueToothService.handleBleError(error);
-      }
-      subscriptionRef.current?.remove();
+      writable?.writeWithoutResponse(message);
     },
-    [checkConditionInput, createNewAddress, readable, universe, writable],
+    [
+      checkConditionInput,
+      createNewAddress,
+      readable,
+      universe,
+      validateAddress,
+      writable,
+    ],
   );
 
   return [loading, handleSetAddress];

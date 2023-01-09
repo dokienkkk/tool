@@ -80,6 +80,18 @@ export class AddressRepository {
 
     return exportData;
   };
+
+  public delete = async (address: Partial<Address>): Promise<void> => {
+    const dataSource = await databaseService.getDataSource();
+
+    const addressRepository = dataSource.getRepository(Address);
+
+    const findAddress = await addressRepository.findOneBy({
+      id: address.id,
+    });
+
+    await addressRepository.remove(findAddress);
+  };
 }
 
 export const addressRepository = new AddressRepository();

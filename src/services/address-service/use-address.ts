@@ -1,11 +1,16 @@
 import React from 'react';
 import {globalState} from 'src/app/global-state';
 import type {Address, Universe} from 'src/database/model';
+import {showSuccess} from 'src/helpers/toast-helper';
 import {addressRepository} from 'src/repositories/address-repository';
 
 export function useAddress(
   universe: Universe,
-): [Partial<Address>[], (newAddress: Partial<Address>) => Promise<void>] {
+): [
+  Partial<Address>[],
+  (newAddress: Partial<Address>) => Promise<void>,
+  (address: Partial<Address>) => Promise<void>,
+] {
   const [listAddress, setListAddress] = globalState.useAddress();
 
   const getListAddress = React.useCallback(async () => {
@@ -27,9 +32,18 @@ export function useAddress(
     [listAddress, setListAddress],
   );
 
+  const deleteAddress = React.useCallback(
+    async (address: Partial<Address>) => {
+      await addressRepository.delete(address);
+      await getListAddress();
+      showSuccess('Xóa thành công');
+    },
+    [getListAddress],
+  );
+
   React.useEffect(() => {
     getListAddress();
   }, [getListAddress]);
 
-  return [listAddress, createNewAddress];
+  return [listAddress, createNewAddress, deleteAddress];
 }
