@@ -44,5 +44,7 @@
     "search" : "Tìm kiếm",
     "goBack" : "Quay lại",
     "scan" :  "Quét thiết bị",
-    "stop" : "Dừng lại"
+    "stop" : "Dừng lại",
+    "import.select" : "Chọn file",
+    "import.nofile" : "Chưa chọn file"
 }

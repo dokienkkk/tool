@@ -1,3 +1,4 @@
+import type {StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet, View, Text} from 'react-native';
 import type {FC, PropsWithChildren, ReactElement} from 'react';
 import React from 'react';
@@ -18,12 +19,15 @@ interface InfoModalProps {
   button?: string;
 
   onPress?: () => void;
+
+  style?: StyleProp<ViewStyle>;
 }
 
 const InfoModal: FC<PropsWithChildren<InfoModalProps>> = (
   props: InfoModalProps,
 ) => {
-  const {isVisible, onBackdropPress, icon, body, button, onPress} = props;
+  const {isVisible, onBackdropPress, icon, body, button, onPress, style} =
+    props;
   return (
     <Modal
       isVisible={isVisible}
@@ -31,7 +35,7 @@ const InfoModal: FC<PropsWithChildren<InfoModalProps>> = (
       animationIn="pulse"
       animationOut="bounceOut">
       <View style={styles.container}>
-        <View style={styles.modal}>
+        <View style={[styles.modal, StyleSheet.flatten(style)]}>
           {icon && <View style={styles.icon}>{icon}</View>}
           <View style={styles.body}>
             <Text style={[shareStyles.textRegular, styles.text]}>{body}</Text>
@@ -63,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     overflow: 'hidden',
-    minHeight: 200,
+    height: 200,
     paddingVertical: 20,
   },
   icon: {},

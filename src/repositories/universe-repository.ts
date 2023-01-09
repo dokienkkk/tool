@@ -75,6 +75,35 @@ export class UniverseRepository {
       .where('id IN (:...ids)', {ids: listUniverseIds})
       .execute();
   };
+
+  public createWithId = async (
+    project: Project,
+    index: number,
+    id: string,
+  ): Promise<Universe> => {
+    const dataSource = await databaseService.getDataSource();
+
+    const universeRepository = dataSource.getRepository(Universe);
+
+    const existUniverse = await universeRepository.findOneBy({
+      id,
+    });
+
+    if (existUniverse) {
+      return Promise.reject({index});
+    }
+
+    const newUniverse = new Universe();
+    newUniverse.id = id;
+    newUniverse.name = `Universe ${index}`;
+    newUniverse.projectId = project.id;
+    newUniverse.index = index;
+    newUniverse.createAt = new Date();
+
+    await universeRepository.save(newUniverse);
+
+    return newUniverse;
+  };
 }
 
 export const universeRepository = new UniverseRepository();

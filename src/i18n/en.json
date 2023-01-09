@@ -44,5 +44,7 @@
     "search" : "Search",
     "goBack" : "Go Back",
     "scan" :  "Scan Device",
-    "stop" : "Stop"
+    "stop" : "Stop",
+    "import.select" : "Select file",
+    "import.nofile" : "No file selected"
 }

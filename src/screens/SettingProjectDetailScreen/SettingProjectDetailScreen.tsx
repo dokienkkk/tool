@@ -42,7 +42,7 @@ const SettingProjectDetailScreen: FC<SettingProjectDetailScreenProps> = (
   }, [navigation]);
 
   const handleExportFile = React.useCallback(async () => {
-    const status = await exportPermissionSevice.checkPermission();
+    const status = await exportPermissionSevice.requestPermission();
     if (status === 'blocked') {
       showWarning(
         'Vui lòng cấp quyền cho ứng dụng truy cập bộ nhớ để sử dụng chức năng này',
@@ -136,6 +136,7 @@ const SettingProjectDetailScreen: FC<SettingProjectDetailScreenProps> = (
         body={body}
         button={translate('action.continue')}
         onPress={navigation.goBack}
+        style={styles.modal}
       />
     </DefaultLayout>
   );
@@ -166,6 +167,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     color: Colors.black,
+  },
+  modal: {
+    minHeight: 210,
   },
 });
 
