@@ -11,8 +11,6 @@ import LineBlock from 'src/components/LineBlock/LineBlock';
 import shareStyles from 'src/styles';
 import Colors from 'src/styles/Colors';
 import CustomButton from 'src/components/CustomButton/CustomButton';
-import {showWarning} from 'src/helpers/toast-helper';
-import {UNIVERSE_ADDRESS} from 'src/config/set-address';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Devices} from 'src/config/device';
 import type {Device} from 'src/types/device';
@@ -23,47 +21,21 @@ import {blueToothService} from 'src/services/bluetooth-service';
 interface SetAddressProps {}
 
 const SetAddress: FC<SetAddressProps> = () => {
-  const [address, setAddress] = React.useState('01');
-
-  const [order, setOrder] = React.useState('01');
-
-  const [typeDevice, setTypeDevice] = React.useState(0);
-
-  const [loading, handleSendAddress] = blueToothService.useBluetoothControl();
-
-  const changeAddress = React.useCallback(
-    (type: 'increase' | 'decrease') => {
-      let numAddress = Number(address);
-
-      if (isNaN(numAddress)) {
-        return;
-      }
-
-      if (type === 'increase') {
-        numAddress++;
-
-        if (numAddress > UNIVERSE_ADDRESS.MAX) {
-          showWarning(`Có tối đa ${UNIVERSE_ADDRESS.MAX} địa chỉ`);
-          return;
-        }
-
-        setAddress(numAddress.toString());
-      } else if (type === 'decrease') {
-        numAddress--;
-
-        if (numAddress === UNIVERSE_ADDRESS.MIN) {
-          return;
-        }
-
-        setAddress(numAddress.toString());
-      }
-    },
-    [address, setAddress],
-  );
+  const [
+    loading,
+    handleSendAddress,
+    order,
+    handleChangeOrder,
+    address,
+    changeAddress,
+    handleChangeInputAddress,
+    typeDevice,
+    handleChangeDevice,
+  ] = blueToothService.useBluetoothControl();
 
   const handleSetAddress = React.useCallback(async () => {
-    await handleSendAddress(address, order, typeDevice);
-  }, [address, handleSendAddress, order, typeDevice]);
+    await handleSendAddress();
+  }, [handleSendAddress]);
 
   return (
     <View style={styles.container}>
@@ -81,7 +53,7 @@ const SetAddress: FC<SetAddressProps> = () => {
             valueField="type"
             value={typeDevice}
             onChange={(item: Device) => {
-              setTypeDevice(item.type);
+              handleChangeDevice(item.type);
             }}
             maxHeight={300}
             renderLeftIcon={() => (
@@ -105,7 +77,7 @@ const SetAddress: FC<SetAddressProps> = () => {
                 keyboardType="numeric"
                 placeholder="Nhập STT"
                 value={order}
-                onChangeText={setOrder}
+                onChangeText={handleChangeOrder}
                 maxLength={4}
                 multiline={false}
                 style={[
@@ -138,7 +110,7 @@ const SetAddress: FC<SetAddressProps> = () => {
                     shareStyles.w100,
                     styles.textCenter,
                   ]}
-                  onChangeText={setAddress}
+                  onChangeText={handleChangeInputAddress}
                   value={address}
                   maxLength={3}
                 />

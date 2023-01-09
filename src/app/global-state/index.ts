@@ -152,6 +152,48 @@ export class GlobalState {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return React.useGlobal<GlobalState, 'address'>('address');
   }
+
+  /**
+   * Charactiric Readable
+   *
+   *@type {Characteristic}
+   */
+
+  public get readable(): Characteristic {
+    return React.getGlobal<GlobalState>().readable;
+  }
+
+  public useReadable(): StateTuple<GlobalState, 'readable'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'readable'>('readable');
+  }
+
+  public async setReadable(readable: Characteristic) {
+    await React.setGlobal<GlobalState>({
+      readable,
+    });
+  }
+
+  /**
+   * Charactiric Writeable
+   *
+   *@type {Characteristic}
+   */
+
+  public get writeable(): Characteristic {
+    return React.getGlobal<GlobalState>().writeable;
+  }
+
+  public useWriteable(): StateTuple<GlobalState, 'writeable'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'writeable'>('writeable');
+  }
+
+  public async setWriteable(writeable: Characteristic) {
+    await React.setGlobal<GlobalState>({
+      writeable,
+    });
+  }
 }
 
 export const globalState: GlobalState = new GlobalState();

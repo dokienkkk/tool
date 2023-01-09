@@ -1,18 +1,9 @@
 declare const Buffer;
 import type {MutableRefObject} from 'react';
 import React from 'react';
-import type {
-  BleError,
-  Characteristic,
-  Device,
-  Subscription,
-} from 'react-native-ble-plx';
+import type {BleError, Device} from 'react-native-ble-plx';
 import {globalState} from 'src/app/global-state';
-import {
-  SERVICES_UUID_READ_WRITE,
-  TIME_OUT,
-  UNIVERSE_ADDRESS,
-} from 'src/config/set-address';
+import {TIME_OUT, UNIVERSE_ADDRESS} from 'src/config/set-address';
 import {
   convertAddressToArray,
   convertResponse,
@@ -22,25 +13,43 @@ import type {DeviceType} from 'src/types/device';
 import {STATUS} from 'src/types/status';
 import {addressService} from '../address-service';
 import base64 from 'react-native-base64';
+import type {BluetoothSevice} from '.';
+import type {SubscriptionLike} from 'rxjs';
+import {elementOfDevice} from 'src/config/device';
 
-export function useBluetoothControl(): [
+export function useBluetoothControl(
+  this: BluetoothSevice,
+): [
   boolean,
-  (address: string, order: string, deviceType: DeviceType) => Promise<void>,
+  () => Promise<boolean>,
+  string,
+  (order: string) => void,
+  string,
+  (type: 'increase' | 'decrease') => void,
+  (address: string) => void,
+  DeviceType,
+  (type: DeviceType) => void,
 ] {
   const [connectedDevice] = globalState.useConnectedDevice();
 
   const [universe] = globalState.useUniverse();
 
-  const [writable, setWritable] = React.useState<Characteristic>();
+  const [writeable] = globalState.useWriteable();
 
-  const [readable, setReadable] = React.useState<Characteristic>();
-
-  const [loading, setLoading] = React.useState(false);
+  const [listAddress] = globalState.useAddress();
 
   const [, createNewAddress] = addressService.useAddress(universe);
 
-  const subscriptionRef: MutableRefObject<Subscription> =
-    React.useRef<Subscription>();
+  const [loading, setLoading] = React.useState(false);
+
+  const [order, setOrder] = React.useState('01');
+
+  const [address, setAddress] = React.useState('01');
+
+  const [typeDevice, setTypeDevice] = React.useState(0);
+
+  const subscriptionRef: MutableRefObject<SubscriptionLike> =
+    React.useRef<SubscriptionLike>();
 
   React.useEffect(() => {
     const subscribe = connectedDevice?.onDisconnected(
@@ -59,150 +68,189 @@ export function useBluetoothControl(): [
     };
   }, [connectedDevice]);
 
-  const getCharacteristic = React.useCallback(async () => {
-    if (!connectedDevice) {
-      return;
-    }
-    const discoverDevice =
-      await connectedDevice.discoverAllServicesAndCharacteristics();
-
-    const services = await discoverDevice.services();
-
-    const readAndWriteService = services.find(
-      service => service.uuid === SERVICES_UUID_READ_WRITE,
-    );
-
-    const characteristics = await readAndWriteService.characteristics();
-
-    const writeCharacteristic = characteristics.find(
-      characteristic => characteristic.isWritableWithoutResponse === true,
-    );
-
-    const readCharacteristic = characteristics.find(
-      characteristic => characteristic.isReadable === true,
-    );
-
-    if (writeCharacteristic && readCharacteristic) {
-      setReadable(readCharacteristic);
-      setWritable(writeCharacteristic);
-    }
-  }, [connectedDevice]);
-
-  React.useEffect(() => {
-    getCharacteristic();
-  }, [getCharacteristic]);
-
-  const checkConditionInput = React.useCallback(
-    (address: string, order: string): boolean => {
-      if (isNaN(Number(address)) || isNaN(Number(order))) {
-        showWarning('Giá trị nhập vào phải là số');
-        return false;
-      }
-
-      if (Number(address) > UNIVERSE_ADDRESS.MAX) {
-        showWarning(`Có tối đa ${UNIVERSE_ADDRESS.MAX} địa chỉ`);
-        return false;
-      }
-
-      if (Number(address) === UNIVERSE_ADDRESS.MIN) {
-        showWarning(`Địa chỉ cần lớn hơn ${UNIVERSE_ADDRESS.MIN}`);
-        return false;
-      }
-
-      if (!connectedDevice) {
-        showWarning('Bạn chưa kết nối với thiết bị');
-        return false;
-      }
-
-      return true;
-    },
-    [connectedDevice],
-  );
-
-  const validateAddress = React.useCallback((address: number): boolean => {
-    return true;
+  const handleChangeOrder = React.useCallback((newOrder: string) => {
+    setOrder(newOrder);
   }, []);
 
-  const handleSetAddress = React.useCallback(
-    async (address: string, order: string, deviceType: DeviceType) => {
-      if (!checkConditionInput(address, order)) {
+  const handleChangeInputAddress = React.useCallback((newAddress: string) => {
+    setAddress(newAddress);
+  }, []);
+
+  const handleChangeDevice = React.useCallback((type: DeviceType) => {
+    setTypeDevice(type);
+  }, []);
+
+  const changeAddress = React.useCallback(
+    (type: 'increase' | 'decrease') => {
+      let numAddress = Number(address);
+
+      if (isNaN(numAddress)) {
         return;
       }
 
-      if (!validateAddress(Number(address))) {
-        return;
-      }
+      if (type === 'increase') {
+        numAddress++;
 
-      setLoading(true);
-
-      const timeOut = setTimeout(() => {
-        setLoading(false);
-      }, TIME_OUT);
-
-      const params = convertAddressToArray(Number(address));
-
-      const hexString = params.reduce(
-        (result, hexValue) => result + String.fromCharCode(hexValue),
-        '',
-      );
-
-      subscriptionRef.current?.remove();
-
-      readable?.monitor(async (error: BleError, response) => {
-        if (error) {
-          // eslint-disable-next-line no-console
-          console.log('Error when subscrible response', error);
-        }
-
-        if (!response) {
+        if (numAddress > UNIVERSE_ADDRESS.MAX) {
+          showWarning(`Có tối đa ${UNIVERSE_ADDRESS.MAX} địa chỉ`);
           return;
         }
 
-        const dataInBase64 = response.value;
+        setAddress(numAddress.toString());
+      } else if (type === 'decrease') {
+        numAddress--;
 
-        const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
-
-        clearTimeout(timeOut);
-
-        setLoading(false);
-
-        if (
-          convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
-          Number(address)
-        ) {
-          await createNewAddress({
-            order: Number(order),
-            deviceType: deviceType,
-            addressId: Number(address),
-            universeId: universe.id,
-          })
-            .then(() => {
-              showSuccess('Set địa chỉ thành công');
-              subscriptionRef.current?.remove();
-            })
-            .catch(err => {
-              // eslint-disable-next-line no-console
-              console.log('Error when create address into DB: ', err);
-            });
-        } else {
-          showError('Set địa chỉ thất bại');
-          subscriptionRef.current?.remove();
+        if (numAddress === UNIVERSE_ADDRESS.MIN) {
+          return;
         }
-      });
 
-      const message = base64.encode(hexString);
-
-      writable?.writeWithoutResponse(message);
+        setAddress(numAddress.toString());
+      }
     },
-    [
-      checkConditionInput,
-      createNewAddress,
-      readable,
-      universe,
-      validateAddress,
-      writable,
-    ],
+    [address, setAddress],
   );
 
-  return [loading, handleSetAddress];
+  const increaseOrder = React.useCallback(() => {
+    if (Number(order) < 512) {
+      setOrder((Number(order) + 1).toString());
+    }
+  }, [order]);
+
+  const increaseAddress = React.useCallback(() => {
+    setAddress((Number(address) + elementOfDevice(typeDevice)).toString());
+  }, [address, typeDevice]);
+
+  const checkConditionInput = React.useCallback((): boolean => {
+    if (!connectedDevice) {
+      showWarning('Bạn chưa kết nối với thiết bị');
+      return false;
+    }
+
+    if (isNaN(Number(address)) || isNaN(Number(order))) {
+      showWarning('Giá trị nhập vào phải là số');
+      return false;
+    }
+
+    if (Number(address) > UNIVERSE_ADDRESS.MAX) {
+      showWarning(`Có tối đa ${UNIVERSE_ADDRESS.MAX} địa chỉ`);
+      return false;
+    }
+
+    if (Number(address) === UNIVERSE_ADDRESS.MIN) {
+      showWarning(`Địa chỉ cần lớn hơn ${UNIVERSE_ADDRESS.MIN}`);
+      return false;
+    }
+
+    const index = listAddress.findIndex(addr => addr.order === Number(order));
+
+    if (index > -1) {
+      showWarning('Số thứ tự đèn đã tồn tại');
+      return false;
+    }
+
+    return true;
+  }, [address, connectedDevice, listAddress, order]);
+
+  const validateAddress = React.useCallback((): boolean => {
+    //Address existed
+    const index = listAddress.findIndex(
+      addr => addr.addressId === Number(address),
+    );
+
+    if (index > -1) {
+      showWarning('Địa chỉ này đã được set');
+      return false;
+    }
+
+    //Invalid address
+
+    return true;
+  }, [address, listAddress]);
+
+  const handleSetAddress = React.useCallback(async (): Promise<boolean> => {
+    if (!checkConditionInput()) {
+      return;
+    }
+
+    if (!validateAddress()) {
+      return;
+    }
+
+    setLoading(true);
+
+    const timeOut = setTimeout(() => {
+      setLoading(false);
+    }, TIME_OUT);
+
+    const params = convertAddressToArray(Number(address));
+
+    const hexString = params.reduce(
+      (result, hexValue) => result + String.fromCharCode(hexValue),
+      '',
+    );
+
+    subscriptionRef.current?.unsubscribe();
+
+    subscriptionRef.current = this.message.subscribe(async response => {
+      const dataInBase64 = response;
+
+      const dataInRawBytes = Buffer.from(dataInBase64, 'base64');
+
+      if (
+        convertResponse([dataInRawBytes[0], dataInRawBytes[1]]) ===
+        Number(address)
+      ) {
+        await createNewAddress({
+          order: Number(order),
+          deviceType: typeDevice,
+          addressId: Number(address),
+          universeId: universe.id,
+        })
+          .then(() => {
+            increaseOrder();
+            increaseAddress();
+            showSuccess('Set địa chỉ thành công');
+            subscriptionRef.current?.unsubscribe();
+          })
+          .catch(err => {
+            // eslint-disable-next-line no-console
+            console.log('Error when create address into DB: ', err);
+          });
+      } else {
+        showError('Set địa chỉ thất bại');
+        subscriptionRef.current?.unsubscribe();
+      }
+
+      clearTimeout(timeOut);
+
+      setLoading(false);
+    });
+
+    const message = base64.encode(hexString);
+
+    writeable?.writeWithoutResponse(message);
+  }, [
+    address,
+    checkConditionInput,
+    createNewAddress,
+    increaseAddress,
+    increaseOrder,
+    order,
+    typeDevice,
+    universe,
+    validateAddress,
+    writeable,
+  ]);
+
+  return [
+    loading,
+    handleSetAddress,
+    order,
+    handleChangeOrder,
+    address,
+    changeAddress,
+    handleChangeInputAddress,
+    typeDevice,
+    handleChangeDevice,
+  ];
 }

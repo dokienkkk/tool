@@ -22,3 +22,7 @@ export const Devices: Device[] = [
 export const renderNameDevice = (type: DeviceType): string => {
   return Devices.find(device => device.type === type)?.name ?? 'Đèn';
 };
+
+export const elementOfDevice = (type: DeviceType): number => {
+  return Devices.find(device => device.type === type).elements;
+};
