@@ -59,7 +59,7 @@ export class AddressRepository {
           universeId: universe.id,
         });
         const data = {
-          idUniverse: universe.id,
+          idUniverse: universe.index,
           data: listAddress.map(address => {
             return {
               STT: address.order,

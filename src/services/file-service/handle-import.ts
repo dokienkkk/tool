@@ -12,11 +12,10 @@ export async function importFile(data: ProjectData) {
     const newProject = await projectRepository.create(nameProject);
 
     await Promise.all(
-      data.universe.map(async (universe, index) => {
-        const newUniverse = await universeRepository.createWithId(
+      data.universe.map(async universe => {
+        const newUniverse = await universeRepository.create(
           newProject,
-          index + 1,
-          universe.idUniverse,
+          Number(universe.idUniverse),
         );
 
         for (let dataAddress of universe.data) {
