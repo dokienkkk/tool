@@ -14,6 +14,8 @@ export function handleBleError(error: BleError, title = 'Lỗi') {
       showError('Mất kết nối với thiết bị');
       return;
     default:
+      // eslint-disable-next-line no-console
+      console.log(error);
       showError(title);
   }
 }

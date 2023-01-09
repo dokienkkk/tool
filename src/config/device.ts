@@ -23,6 +23,9 @@ export const renderNameDevice = (type: DeviceType): string => {
   return Devices.find(device => device.type === type)?.name ?? 'Đèn';
 };
 
-export const elementOfDevice = (type: DeviceType): number => {
+export const elementOfDevice = (type: DeviceType | undefined): number => {
+  if (typeof type === 'undefined') {
+    return 0;
+  }
   return Devices.find(device => device.type === type).elements;
 };

@@ -1,7 +1,6 @@
 declare const Buffer;
 import type {MutableRefObject} from 'react';
 import React from 'react';
-import type {BleError, Device} from 'react-native-ble-plx';
 import {globalState} from 'src/app/global-state';
 import {TIME_OUT, UNIVERSE_ADDRESS} from 'src/config/set-address';
 import {
@@ -10,12 +9,12 @@ import {
 } from 'src/helpers/string-helper';
 import {showError, showSuccess, showWarning} from 'src/helpers/toast-helper';
 import type {DeviceType} from 'src/types/device';
-import {STATUS} from 'src/types/status';
 import {addressService} from '../address-service';
 import base64 from 'react-native-base64';
 import type {BluetoothSevice} from '.';
 import type {SubscriptionLike} from 'rxjs';
 import {elementOfDevice} from 'src/config/device';
+import {STATUS} from 'src/types/status';
 
 export function useBluetoothControl(
   this: BluetoothSevice,
@@ -31,6 +30,8 @@ export function useBluetoothControl(
   (type: DeviceType) => void,
 ] {
   const [connectedDevice] = globalState.useConnectedDevice();
+
+  const [status] = globalState.useBluetoothStatus();
 
   const [universe] = globalState.useUniverse();
 
@@ -50,23 +51,6 @@ export function useBluetoothControl(
 
   const subscriptionRef: MutableRefObject<SubscriptionLike> =
     React.useRef<SubscriptionLike>();
-
-  React.useEffect(() => {
-    const subscribe = connectedDevice?.onDisconnected(
-      async (error: BleError, device: Device) => {
-        if (error) {
-          // eslint-disable-next-line no-console
-          console.log('Error when subscrible onDisconnected: ', error);
-        }
-        if (device && device.id === connectedDevice?.id) {
-          await globalState.setBluetoothStatus(STATUS.DISCONNECTED);
-        }
-      },
-    );
-    return function cleanup() {
-      subscribe?.remove();
-    };
-  }, [connectedDevice]);
 
   const handleChangeOrder = React.useCallback((newOrder: string) => {
     setOrder(newOrder);
@@ -121,11 +105,6 @@ export function useBluetoothControl(
   }, [address, typeDevice]);
 
   const checkConditionInput = React.useCallback((): boolean => {
-    if (!connectedDevice) {
-      showWarning('Bạn chưa kết nối với thiết bị');
-      return false;
-    }
-
     if (isNaN(Number(address)) || isNaN(Number(order))) {
       showWarning('Giá trị nhập vào phải là số');
       return false;
@@ -149,7 +128,7 @@ export function useBluetoothControl(
     }
 
     return true;
-  }, [address, connectedDevice, listAddress, order]);
+  }, [address, listAddress, order]);
 
   const validateAddress = React.useCallback((): boolean => {
     //Address existed
@@ -163,11 +142,56 @@ export function useBluetoothControl(
     }
 
     //Invalid address
+    listAddress.sort(
+      (addressA, addressB) => addressA.addressId - addressB.addressId,
+    );
 
-    return true;
-  }, [address, listAddress]);
+    let LESS = UNIVERSE_ADDRESS.MIN;
+    let GREATER = UNIVERSE_ADDRESS.MAX;
+
+    const length = listAddress.length;
+
+    if (length > 0 && Number(address) > listAddress[length - 1]?.addressId) {
+      GREATER = UNIVERSE_ADDRESS.MAX;
+      LESS = listAddress[length - 1]?.addressId;
+    }
+
+    for (let i = 0; i < length; i++) {
+      if (Number(address) < listAddress[i].addressId) {
+        GREATER = listAddress[i].addressId;
+        LESS = length > 1 ? listAddress[i - 1].addressId : UNIVERSE_ADDRESS.MIN;
+        break;
+      }
+    }
+
+    const elementOfLess = elementOfDevice(
+      listAddress.find(addr => addr.addressId === LESS)?.deviceType,
+    );
+
+    const elements = elementOfDevice(typeDevice);
+
+    if (
+      LESS + elementOfLess <= Number(address) &&
+      Number(address) + elements <= GREATER
+    ) {
+      return true;
+    }
+
+    showError('Địa chỉ không hợp lệ\nVui lòng chọn địa chỉ khác');
+
+    return false;
+  }, [address, listAddress, typeDevice]);
 
   const handleSetAddress = React.useCallback(async (): Promise<boolean> => {
+    if (!connectedDevice) {
+      showWarning('Bạn chưa kết nối với thiết bị');
+      return;
+    }
+
+    if (status === STATUS.DISCONNECTED) {
+      showWarning('Thiết bị đang mất kết nối');
+      return;
+    }
     if (!checkConditionInput()) {
       return;
     }
@@ -232,10 +256,12 @@ export function useBluetoothControl(
   }, [
     address,
     checkConditionInput,
+    connectedDevice,
     createNewAddress,
     increaseAddress,
     increaseOrder,
     order,
+    status,
     typeDevice,
     universe,
     validateAddress,
