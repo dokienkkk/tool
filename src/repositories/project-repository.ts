@@ -22,13 +22,13 @@ export class ProjectRepository {
 
     const projectRepository = dataSource.getRepository(Project);
 
-    const existProject = await projectRepository.findOneBy({
-      name,
-    });
+    // const existProject = await projectRepository.findOneBy({
+    //   name,
+    // });
 
-    if (existProject) {
-      return Promise.reject({name});
-    }
+    // if (existProject) {
+    //   return Promise.reject({name});
+    // }
 
     const newProject = new Project();
     newProject.id = v4();

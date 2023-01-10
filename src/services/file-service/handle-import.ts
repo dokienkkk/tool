@@ -1,4 +1,3 @@
-import {genNameFileExport} from 'src/helpers/time-helper';
 import {showError} from 'src/helpers/toast-helper';
 import {addressRepository} from 'src/repositories/address-repository';
 import {projectRepository} from 'src/repositories/project-repository';
@@ -7,7 +6,7 @@ import type {ProjectData} from 'src/types/data';
 
 export async function importFile(data: ProjectData) {
   try {
-    const nameProject = data.project + ` ${genNameFileExport(new Date())}`;
+    const nameProject = data.project + ' (import)';
 
     const newProject = await projectRepository.create(nameProject);
 
