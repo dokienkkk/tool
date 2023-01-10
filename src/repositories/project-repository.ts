@@ -6,7 +6,7 @@ export class ProjectRepository {
   public list = async (): Promise<Project[]> => {
     const dataSource = await databaseService.getDataSource();
 
-    if (dataSource.isInitialized) {
+    if (dataSource?.isInitialized) {
       const projectRepository = dataSource.getRepository(Project);
 
       const listProject = await projectRepository.find();

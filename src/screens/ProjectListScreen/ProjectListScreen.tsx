@@ -26,6 +26,8 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
 
   const [translate] = useTranslation();
 
+  bluetoothPermissionSevice.usePermission();
+
   const [listProject, getListProject] = projectService.useProjectList();
 
   const [
@@ -62,8 +64,6 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
     ),
     [handleGoToProjectDetailScreen],
   );
-
-  bluetoothPermissionSevice.usePermission();
 
   return (
     <DefaultLayout
