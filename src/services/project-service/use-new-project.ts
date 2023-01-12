@@ -30,6 +30,8 @@ export function useNewProject(): [
     try {
       await projectRepository.create(nameProject.trim());
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
       if (error?.name && typeof error?.name === 'string') {
         showWarning(translate('project.error.existName', {name: error?.name}));
       }

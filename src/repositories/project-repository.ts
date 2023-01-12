@@ -1,34 +1,21 @@
 import {Project} from 'src/database/model/Project';
 import {databaseService} from 'src/database/services/database-service';
 import {v4} from 'uuid';
-
 export class ProjectRepository {
   public list = async (): Promise<Project[]> => {
-    const dataSource = await databaseService.getDataSource();
+    const dataSource = databaseService.getDataSource();
 
-    if (dataSource?.isInitialized) {
-      const projectRepository = dataSource.getRepository(Project);
+    const projectRepository = dataSource.getRepository(Project);
 
-      const listProject = await projectRepository.find();
+    const listProject = await projectRepository.find();
 
-      return listProject;
-    }
-
-    return [];
+    return listProject;
   };
 
   public create = async (name: string): Promise<Project> => {
     const dataSource = await databaseService.getDataSource();
 
     const projectRepository = dataSource.getRepository(Project);
-
-    // const existProject = await projectRepository.findOneBy({
-    //   name,
-    // });
-
-    // if (existProject) {
-    //   return Promise.reject({name});
-    // }
 
     const newProject = new Project();
     newProject.id = v4();

@@ -14,8 +14,8 @@ import ProjectItemIcon from 'src/icons/ProjectItemIcon';
 import {numberOfLines} from 'src/helpers/string-helper';
 import {projectService} from 'src/services/project-service';
 import DMXIcon from 'src/icons/DMXIcon';
-import type {Project} from 'src/database/model';
 import {bluetoothPermissionSevice} from 'src/services/bluetooth-permission-service';
+import type {ProjectWithQuantity} from 'src/services/project-service/use-project-list';
 
 interface ProjectListScreenProps extends NativeStackScreenProps<any> {}
 
@@ -40,7 +40,7 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
   ] = projectService.useNewProject();
 
   const handleGoToProjectDetailScreen = React.useCallback(
-    (project: Project) => {
+    (project: ProjectWithQuantity) => {
       navigation.navigate(ProjectDetailScreen.name, {
         project,
       });
@@ -54,7 +54,7 @@ const ProjectListScreen: FC<ProjectListScreenProps> = (
   }, [getListProject, handleCreateNewProject]);
 
   const renderItem = React.useCallback(
-    ({item}: {item: Project}) => (
+    ({item}: {item: ProjectWithQuantity}) => (
       <TouchableBlock
         left={<ProjectItemIcon color={Colors.blue} />}
         label={numberOfLines(item?.name, 30)}

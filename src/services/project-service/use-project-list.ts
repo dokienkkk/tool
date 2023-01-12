@@ -1,24 +1,21 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import type {Project} from 'src/database/model/Project';
 import {projectRepository} from 'src/repositories/project-repository';
 import {universeRepository} from 'src/repositories/universe-repository';
+import type {Project} from 'src/types/project';
 
 export interface ProjectWithQuantity extends Project {
   numberOfUniverse: number;
 }
 
 export function useProjectList(): [ProjectWithQuantity[], () => Promise<void>] {
-  const navigation = useNavigation();
-
-  const [list, setList] = React.useState([]);
+  const [list, setList] = React.useState<ProjectWithQuantity[]>([]);
 
   const getListProject = React.useCallback(async () => {
     const listProject = await projectRepository.list();
     var result = await Promise.all(
       listProject.map(
         async (project: Project): Promise<ProjectWithQuantity> => {
-          const listUniverse = await universeRepository.count(project);
+          const listUniverse = await universeRepository.count(project.id);
           return {...project, numberOfUniverse: listUniverse};
         },
       ),
@@ -27,13 +24,8 @@ export function useProjectList(): [ProjectWithQuantity[], () => Promise<void>] {
   }, []);
 
   React.useEffect(() => {
-    // projectRepository.list().then((listPoject: Project[]) => {
-    //   setList(listPoject);
-    // });
-    navigation.addListener('focus', () => {
-      getListProject();
-    });
-  }, [getListProject, navigation]);
+    getListProject();
+  }, [getListProject]);
 
   return [list, getListProject];
 }

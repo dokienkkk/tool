@@ -194,6 +194,24 @@ export class GlobalState {
       writeable,
     });
   }
+
+  /**
+   * Is First Time Open
+   */
+  public get isFirstTime(): boolean {
+    return React.getGlobal<GlobalState>().isFirstTime;
+  }
+
+  public useIsFirstTime(): StateTuple<GlobalState, 'isFirstTime'> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return React.useGlobal<GlobalState, 'isFirstTime'>('isFirstTime');
+  }
+
+  public async setIsFirstTime(isFirstTime: boolean) {
+    await React.setGlobal<GlobalState>({
+      isFirstTime,
+    });
+  }
 }
 
 export const globalState: GlobalState = new GlobalState();

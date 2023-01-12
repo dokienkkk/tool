@@ -16,13 +16,13 @@ export class UniverseRepository {
     return listUniverse;
   };
 
-  public count = async (project: Project): Promise<number> => {
+  public count = async (projectId: string): Promise<number> => {
     const dataSource = await databaseService.getDataSource();
 
     const universeRepository = dataSource.getRepository(Universe);
 
     const listUniverse = await universeRepository.findBy({
-      projectId: project.id,
+      projectId: projectId,
     });
 
     return listUniverse.length;

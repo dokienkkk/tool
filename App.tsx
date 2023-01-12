@@ -15,10 +15,10 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import RootNavigator from './src/navigator/RootNavigator/RootNavigator';
 import {setJSExceptionHandler} from 'react-native-exception-handler';
 import {globalState} from './src/app/global-state';
-import {databaseService} from './src/database/services/database-service';
-import {AppState} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {blueToothService} from 'src/services/bluetooth-service';
+import {databaseService} from 'src/database/services/database-service';
+import {appStorage} from 'src/app/app-storage';
 
 setJSExceptionHandler((error, isFatal) => {
   // eslint-disable-next-line no-console
@@ -42,14 +42,7 @@ const App: LazyExoticComponent<any> = React.lazy(async () => {
 
   await databaseService.connectDatabase();
 
-  const unsubscribe = AppState.addEventListener(
-    'change',
-    databaseService.handleAppState,
-  );
-
-  unsubscribe.remove();
-
-  AppState.addEventListener('change', databaseService.handleAppState);
+  await appStorage.setIsFirstTime(false);
 
   return {
     default: RootComponent,
@@ -60,6 +53,7 @@ const AppEntry: FC = () => {
   React.useEffect(() => {
     SplashScreen.hide();
   }, []);
+
   return (
     <Suspense fallback={null}>
       <App />
