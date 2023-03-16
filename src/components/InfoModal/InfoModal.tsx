@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     overflow: 'hidden',
-    height: 200,
+    minHeight: 200,
     paddingVertical: 20,
   },
   icon: {},

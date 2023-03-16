@@ -1,8 +1,9 @@
-import {Devices} from 'src/config/device';
+import {Devices, elementOfDevice} from 'src/config/device';
 import type {Project} from 'src/database/model';
 import {Universe} from 'src/database/model';
 import {Address} from 'src/database/model';
 import {databaseService} from 'src/database/services/database-service';
+import type {DataExport, Fixture} from 'src/types/data';
 import {v4} from 'uuid';
 
 export class AddressRepository {
@@ -38,7 +39,7 @@ export class AddressRepository {
     return listAddress;
   };
 
-  public get = async (project: Project) => {
+  public get = async (project: Project): Promise<DataExport> => {
     const dataSource = await databaseService.getDataSource();
 
     const universeRepository = dataSource.getRepository(Universe);
@@ -48,34 +49,45 @@ export class AddressRepository {
     });
 
     if (listUniverses.length === 0) {
-      return [];
+      return null;
     }
 
     const addressRepository = dataSource.getRepository(Address);
 
-    const result = await Promise.all(
+    const result = [];
+
+    await Promise.all(
       listUniverses.map(async (universe: Universe): Promise<any> => {
         const listAddress = await addressRepository.findBy({
           universeId: universe.id,
         });
-        const data = {
-          idUniverse: universe.index,
-          data: listAddress.map(address => {
-            return {
-              STT: address.order,
-              address: address.addressId,
-              typeDevice: address.deviceType,
-            };
-          }),
-        };
+        // const Testdata = {
+        //   idUniverse: universe.index,
+        //   data: listAddress.map(address => {
+        //     return {
+        //       STT: address.order,
+        //       address: address.addressId,
+        //       typeDevice: address.deviceType,
+        //     };
+        //   }),
+        // };
 
-        return data;
+        listAddress.forEach(address => {
+          const data: Fixture = {
+            ID: address.order,
+            Universe: universe.index,
+            Address: address.addressId,
+            Channels: elementOfDevice(address.deviceType),
+          };
+
+          result.push(data);
+        });
       }),
     );
 
     const exportData = {
-      project: project.name,
-      universe: result,
+      projectName: project.name,
+      data: result,
     };
 
     return exportData;

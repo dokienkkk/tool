@@ -13,3 +13,15 @@ export interface AddressData {
   address: number;
   typeDevice: number;
 }
+
+export interface Fixture {
+  ID: number;
+  Universe: number;
+  Address: number;
+  Channels: number;
+}
+
+export interface DataExport {
+  projectName: string;
+  data: Fixture[];
+}

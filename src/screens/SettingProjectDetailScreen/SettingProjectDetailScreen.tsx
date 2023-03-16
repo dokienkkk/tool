@@ -18,6 +18,7 @@ import {addressRepository} from 'src/repositories/address-repository';
 import InfoModal from 'src/components/InfoModal/InfoModal';
 import SuccessIcon from 'src/icons/SuccessIcon';
 import {showError, showWarning} from 'src/helpers/toast-helper';
+import {obj2xml} from 'src/helpers/xml-helper';
 
 interface SettingProjectDetailScreenProps extends NativeStackScreenProps<any> {}
 
@@ -55,12 +56,19 @@ const SettingProjectDetailScreen: FC<SettingProjectDetailScreenProps> = (
 
     const data = await addressRepository.get(project);
 
+    if (!data) {
+      showWarning('Không có dữ liệu');
+      return;
+    }
+
+    const xml = obj2xml(data);
+
     if (Platform.OS === 'android') {
       const pathFile =
         RNFS.DownloadDirectoryPath +
-        `/dmx_${genNameFileExport(new Date())}.json`;
+        `/dmx_${genNameFileExport(new Date())}.xml`;
 
-      RNFS.writeFile(pathFile, JSON.stringify(data), 'utf8')
+      RNFS.writeFile(pathFile, xml, 'utf8')
         .then(() => {
           setBody(
             `Thông tin của dự án ${project.name} đã được lưu trong ${pathFile}`,
