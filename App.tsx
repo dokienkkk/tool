@@ -18,7 +18,6 @@ import {globalState} from './src/app/global-state';
 import SplashScreen from 'react-native-splash-screen';
 import {blueToothService} from 'src/services/bluetooth-service';
 import {databaseService} from 'src/database/services/database-service';
-import {appStorage} from 'src/app/app-storage';
 
 setJSExceptionHandler((error, isFatal) => {
   // eslint-disable-next-line no-console
@@ -41,8 +40,6 @@ const App: LazyExoticComponent<any> = React.lazy(async () => {
   await globalState.initialize();
 
   await databaseService.connectDatabase();
-
-  await appStorage.setIsFirstTime(false);
 
   return {
     default: RootComponent,

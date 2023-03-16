@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {projectRepository} from 'src/repositories/project-repository';
 import {universeRepository} from 'src/repositories/universe-repository';
@@ -8,6 +9,8 @@ export interface ProjectWithQuantity extends Project {
 }
 
 export function useProjectList(): [ProjectWithQuantity[], () => Promise<void>] {
+  const navigation = useNavigation();
+
   const [list, setList] = React.useState<ProjectWithQuantity[]>([]);
 
   const getListProject = React.useCallback(async () => {
@@ -24,8 +27,14 @@ export function useProjectList(): [ProjectWithQuantity[], () => Promise<void>] {
   }, []);
 
   React.useEffect(() => {
-    getListProject();
-  }, [getListProject]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getListProject();
+    });
+
+    return function cleanup() {
+      unsubscribe();
+    };
+  }, [getListProject, navigation]);
 
   return [list, getListProject];
 }
