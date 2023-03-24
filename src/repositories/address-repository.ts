@@ -61,16 +61,6 @@ export class AddressRepository {
         const listAddress = await addressRepository.findBy({
           universeId: universe.id,
         });
-        // const Testdata = {
-        //   idUniverse: universe.index,
-        //   data: listAddress.map(address => {
-        //     return {
-        //       STT: address.order,
-        //       address: address.addressId,
-        //       typeDevice: address.deviceType,
-        //     };
-        //   }),
-        // };
 
         listAddress.forEach(address => {
           const data: Fixture = {

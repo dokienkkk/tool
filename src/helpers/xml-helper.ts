@@ -21,7 +21,11 @@ var builder = require('xmlbuilder');
 export const obj2xml = (data: DataExport): string => {
   const time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
-  var root = builder.create(XML_ROOT_NAME);
+  var root = builder.create(XML_ROOT_NAME, {
+    encoding: 'UTF-8',
+  });
+
+  root.ele(XML_ROOT_NAME).dtd();
 
   var header = root.ele(XML_PROJECT);
 
